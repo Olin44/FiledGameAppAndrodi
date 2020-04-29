@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -59,6 +60,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                 if (intentData.length() > 0) {
                     if (isURL)
+                        //tutaj zaznaczasz co chcesz żeby ci przesłało do klasy RequestMap
                         startActivity(new Intent(com.example.filedgameapptest.qr.ScannedBarcodeActivity.this, RequestMap.class).putExtra("url", intentData));
                     else {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
