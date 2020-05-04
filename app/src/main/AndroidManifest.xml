@@ -22,7 +22,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".qr.RequestMap"></activity>
+        <activity android:name=".users.register.NewUserActivity"></activity>
+        <activity
+            android:name=".users.register.RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".login.ui.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity android:name=".qr.RequestMap" />
         <activity android:name=".qr.ScannedBarcodeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

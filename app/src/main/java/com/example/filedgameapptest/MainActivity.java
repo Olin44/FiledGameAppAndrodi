@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.filedgameapptest.qr.ScannedBarcodeActivity;
+import com.example.filedgameapptest.login.ui.login.LoginActivity;
+import com.example.filedgameapptest.users.register.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnScanBarcode;
+    private Button btnLogIn;
+    private Button btnSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViews() {
         btnScanBarcode = findViewById(R.id.btnScanBarcode);
+        btnLogIn = findViewById(R.id.btnLogIn);
+        btnSignUp = findViewById(R.id.btnSignUpActivity);
+
         btnScanBarcode.setOnClickListener(this);
+        btnLogIn.setOnClickListener(this);
+        btnSignUp.setOnClickListener(this);
+
     }
 
     @Override
@@ -32,6 +42,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnScanBarcode:
                 startActivity(new Intent(MainActivity.this, ScannedBarcodeActivity.class));
+                break;
+            case R.id.btnLogIn:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                break;
+            case R.id.btnSignUpActivity:
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 break;
         }
 
