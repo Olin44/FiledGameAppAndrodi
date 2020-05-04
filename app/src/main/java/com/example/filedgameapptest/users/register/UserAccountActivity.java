@@ -8,7 +8,10 @@ import android.widget.TextView;
 
 import com.example.filedgameapptest.R;
 
-public class NewUserActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class UserAccountActivity extends AppCompatActivity implements Observer {
 
     private Intent incomingIntent;
     private TextView emailTextView;
@@ -18,6 +21,8 @@ public class NewUserActivity extends AppCompatActivity {
     private String username;
     private String email;
     private String password;
+    private Observable mUserDataRepositoryObservable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,16 +31,22 @@ public class NewUserActivity extends AppCompatActivity {
 
         setIncomingIntent();
         setDataFromIntent();
+        //Builder
         setUserData();
-
         initViews();
+
         setTextViews();
+
+        //Observer + Singleton
+        mUserDataRepositoryObservable = UserDataRepository.getInstance();
+        mUserDataRepositoryObservable.addObserver(this);
+
     }
 
     private void setTextViews() {
         emailTextView.setText(userModel.getEmail());
-        usernameTextView.setText(userModel.getUsername());
         passwordTextView.setText(userModel.getPassword());
+        usernameTextView.setText(userModel.getUsername());
     }
 
     private void setIncomingIntent() {
@@ -65,5 +76,21 @@ public class NewUserActivity extends AppCompatActivity {
         emailTextView = findViewById(R.id.emailTextView);
         usernameTextView = findViewById(R.id.usernameTextView);
         passwordTextView = findViewById(R.id.passwordTextView);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (observable instanceof UserDataRepository) {
+            UserDataRepository userDataRepository = (UserDataRepository) observable;
+            emailTextView.setText(userDataRepository.getEmail());
+            passwordTextView.setText(userDataRepository.getPassword());
+            usernameTextView.setText(userDataRepository.getUsername());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserDataRepositoryObservable.deleteObserver(this);
     }
 }

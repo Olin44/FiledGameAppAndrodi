@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -62,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                             String name = usernameEditText.getText().toString();
                             String email = emailEditText.getText().toString();
                             String password = passwordEditText.getText().toString();
-                            Intent newUserIntent = new Intent(RegisterActivity.this, NewUserActivity.class);
+                            Intent newUserIntent = new Intent(RegisterActivity.this, UserAccountActivity.class);
                             newUserIntent.putExtra("email", email);
                             newUserIntent.putExtra("username", name);
                             newUserIntent.putExtra("password", password);
