@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.qr;
+package com.example.filedgameapptest.maps;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -60,8 +59,8 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                 if (intentData.length() > 0) {
                     if (isURL)
-                        //tutaj zaznaczasz co chcesz żeby ci przesłało do klasy RequestMap
-                        startActivity(new Intent(com.example.filedgameapptest.qr.ScannedBarcodeActivity.this, RequestMap.class).putExtra("url", intentData));
+                        //tutaj zaznaczasz co chcesz żeby ci przesłało do klasy StartMap
+                        startActivity(new Intent(com.example.filedgameapptest.maps.ScannedBarcodeActivity.this, StartMapActivity.class).putExtra("url", intentData));
                     else {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
                     }
@@ -89,10 +88,10 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
-                    if (ActivityCompat.checkSelfPermission(com.example.filedgameapptest.qr.ScannedBarcodeActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(com.example.filedgameapptest.maps.ScannedBarcodeActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
                     } else {
-                        ActivityCompat.requestPermissions(com.example.filedgameapptest.qr.ScannedBarcodeActivity.this, new
+                        ActivityCompat.requestPermissions(com.example.filedgameapptest.maps.ScannedBarcodeActivity.this, new
                                 String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                     }
 

@@ -28,7 +28,7 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_user);
+        setContentView(R.layout.activity_user_account);
 
         setIncomingIntent();
         setDataFromIntent();
