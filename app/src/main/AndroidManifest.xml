@@ -30,8 +30,8 @@
         <activity
             android:name=".users.login.ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".qr.RequestMap" />
-        <activity android:name=".qr.ScannedBarcodeActivity" />
+        <activity android:name=".maps.StartMapActivity" />
+        <activity android:name=".maps.ScannedBarcodeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
