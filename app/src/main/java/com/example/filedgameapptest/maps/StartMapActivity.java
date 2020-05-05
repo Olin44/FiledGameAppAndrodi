@@ -8,10 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.filedgameapptest.MainActivity;
+import com.example.filedgameapptest.BaseURL;
+
+import com.example.filedgameapptest.Map;
+import com.example.filedgameapptest.MapsService;
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.users.login.ui.login.LoginActivity;
-import com.example.filedgameapptest.users.register.RegisterActivity;
+import com.example.filedgameapptest.RetrofitClientInstance;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class StartMapActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -19,6 +26,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     private Button btnStartNewMapActivity;
     private TextView txtResponse;
     private String url;
+    private Map map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +37,28 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
 
         initViews();
         txtResponse.setText(url);
-
+        RequestMap();
 
     }
 
     private void RequestMap() {
-        //
-        //tu sobie piszesz co chcesz zrobić na klikniecie button
-        //
+        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        MapsService mapsService = retrofit.create(MapsService.class);
+        String mapId = url.replace(BaseURL.baseURL + "maps/getMapById/", "");
+        Call<Map> call = mapsService.getMapById(mapId);
+        call.enqueue(new Callback<Map>() {
+            @Override
+            public void onResponse(Call<Map> call, Response<Map> response) {
+                map = response.body();
+                String responseAsString = map.toString();
+                txtResponse.setText(responseAsString);
+            }
 
-        //tym możesz sobie wyświetlić wynik
-        String response = "";
-        txtResponse.setText(response);
-
-        //Chciałabym aby na request (który się będzie dział automatycznie a nie na kliknięcie) pobierało mape i tworzylo mi liste obiektow na mapie
-        // pozniej po kliknieciu 'start' bedzie przechodzilo do aktywnosci juz z mapa google (MapsActivity) i lokalizacja obiektu
+            @Override
+            public void onFailure(Call<Map> call, Throwable t) {
+                System.out.println(t.toString());
+            }
+        });
 
     }
 
@@ -51,7 +66,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
 
         switch (v.getId()) {
             case R.id.btnRequest:
-                RequestMap();
                 break;
             case R.id.btnStartNewMapActivity:
                 //startActivity(new Intent(StartMapActivity.this, MapsActivity.class));

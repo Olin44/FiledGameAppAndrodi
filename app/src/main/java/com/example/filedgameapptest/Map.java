@@ -24,5 +24,17 @@ public class Map {
     @SerializedName("objectOnMapDetails")
     @Expose
     List<ObjectOnMapDetails> objectOnMapDetails;
+
+    public List<ObjectOnMapDetails> getObjectOnMapDetails() {
+        return objectOnMapDetails;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
 

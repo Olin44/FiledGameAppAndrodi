@@ -2,10 +2,12 @@ package com.example.filedgameapptest.users.register;
 
 import androidx.annotation.Nullable;
 
+import lombok.Setter;
+
 /**
  * Data validation state of the register form.
  */
-
+@Setter
 public class RegisterFormState {
 
     @Nullable
