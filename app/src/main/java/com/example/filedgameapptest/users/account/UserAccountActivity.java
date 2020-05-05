@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.users.register;
+package com.example.filedgameapptest.users.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.filedgameapptest.R;
+import com.example.filedgameapptest.users.register.NewUserDataModel;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -17,7 +18,7 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
     private TextView emailTextView;
     private TextView usernameTextView;
     private TextView passwordTextView;
-    private NewUserModel userModel;
+    private NewUserDataModel userModel;
     private String username;
     private String email;
     private String password;
@@ -32,7 +33,7 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
         setIncomingIntent();
         setDataFromIntent();
         //Builder
-        setUserData();
+        setNewUserData();
         initViews();
 
         setTextViews();
@@ -63,8 +64,8 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    private void setUserData() {
-        userModel = new NewUserModel.Builder()
+    private void setNewUserData() {
+        userModel = new NewUserDataModel.Builder()
                 .setUsername(username)
                 .setEmail(email)
                 .setPassword(password)
