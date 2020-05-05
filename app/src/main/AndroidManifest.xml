@@ -22,13 +22,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".users.register.UserAccountActivity"></activity>
+        <activity android:name=".users.account.UserAccountActivity"></activity>
         <activity
             android:name=".users.register.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".login.ui.login.LoginActivity"
+            android:name=".users.login.ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".qr.RequestMap" />
         <activity android:name=".qr.ScannedBarcodeActivity" />

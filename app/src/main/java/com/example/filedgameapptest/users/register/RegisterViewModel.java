@@ -14,10 +14,10 @@ public class RegisterViewModel extends ViewModel {
     private String password;
     private String username;
 
-
     LiveData<RegisterFormState> getRegisterFormState() {
         return registerFormState;
     }
+
 
     public void registerDataChanged(String email, String username, String password, String passwordConf) {
         if (!isEmailValid(email)) {

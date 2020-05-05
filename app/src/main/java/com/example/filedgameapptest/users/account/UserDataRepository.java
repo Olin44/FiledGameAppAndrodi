@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.users.register;
+package com.example.filedgameapptest.users.account;
 
 import android.os.Handler;
 

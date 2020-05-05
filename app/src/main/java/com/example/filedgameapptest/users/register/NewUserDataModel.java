@@ -1,6 +1,6 @@
 package com.example.filedgameapptest.users.register;
 
-public class NewUserModel {
+public class NewUserDataModel {
 
     private String username;
     private String email;
@@ -33,7 +33,7 @@ public class NewUserModel {
             return this;
         }
 
-        public NewUserModel build() {
+        public NewUserDataModel build() {
             if (this.username.isEmpty()) {
                 throw new IllegalStateException(
                         "Username can not be empty!");
@@ -47,7 +47,7 @@ public class NewUserModel {
                         "Password can not be empty!");
             }
 
-            NewUserModel newUserModel = new NewUserModel();
+            NewUserDataModel newUserModel = new NewUserDataModel();
             newUserModel.username = this.username;
             newUserModel.email = this.email;
             newUserModel.password = this.password;
