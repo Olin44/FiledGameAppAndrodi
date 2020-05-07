@@ -16,6 +16,8 @@ import android.widget.EditText;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
 
+import java.io.Serializable;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private RegisterViewModel registerViewModel;
@@ -59,15 +61,19 @@ public class RegisterActivity extends AppCompatActivity {
                     btnSignUp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //TODO: Add new user to API
-                            String name = usernameEditText.getText().toString();
+                            String username = usernameEditText.getText().toString();
                             String email = emailEditText.getText().toString();
                             String password = passwordEditText.getText().toString();
+                            NewUserDataModel userModel = new NewUserDataModel.Builder()
+                                    .setUsername(username)
+                                    .setEmail(email)
+                                    .setPassword(password)
+                                    .setIsActive(false)
+                                    .build();
+                            //TODO: Add new user to API
                             //Simulate API by sending data directly to the view
                             Intent newUserIntent = new Intent(RegisterActivity.this, UserAccountActivity.class);
-                            newUserIntent.putExtra("email", email);
-                            newUserIntent.putExtra("username", name);
-                            newUserIntent.putExtra("password", password);
+                            newUserIntent.putExtra("userModel", (Serializable) userModel);
                             //Successfully sign up, go to userAccount
                             startActivity(newUserIntent);
                         }

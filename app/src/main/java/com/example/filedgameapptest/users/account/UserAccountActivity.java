@@ -19,9 +19,6 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
     private TextView usernameTextView;
     private TextView passwordTextView;
     private NewUserDataModel userModel;
-    private String username;
-    private String email;
-    private String password;
     private Observable mUserDataRepositoryObservable;
 
 
@@ -32,10 +29,8 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
 
         setIncomingIntent();
         setDataFromIntent();
-        //Builder
-        setNewUserData();
-        initViews();
 
+        initViews();
         setTextViews();
 
         //Observer + Singleton
@@ -55,23 +50,9 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
     }
 
     private void setDataFromIntent() {
-        Bundle data = incomingIntent.getExtras();
-
-        if (data != null) {
-            username = (String) data.get("username");
-            email = (String) data.get("email");
-            password = (String) data.get("password");
-        }
+        userModel = (NewUserDataModel) incomingIntent.getSerializableExtra("userModel");
     }
 
-    private void setNewUserData() {
-        userModel = new NewUserDataModel.Builder()
-                .setUsername(username)
-                .setEmail(email)
-                .setPassword(password)
-                .setIsActive(false)
-                .build();
-    }
 
     private void initViews() {
         emailTextView = findViewById(R.id.emailTextView);

@@ -1,6 +1,9 @@
 package com.example.filedgameapptest.users.register;
 
-public class NewUserDataModel {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class NewUserDataModel implements Serializable {
 
     private String username;
     private String email;
