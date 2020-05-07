@@ -13,10 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.filedgameapptest.MapsService;
 import com.example.filedgameapptest.R;
+import com.example.filedgameapptest.RetrofitClientInstance;
+import com.example.filedgameapptest.UserService;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
 
 import java.io.Serializable;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -27,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText passwordConfEditText;
     private TextWatcher afterTextChangedListener;
-
+    private Boolean isUserRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .setIsActive(false)
                                     .build();
                             //TODO: Add new user to API
-                            //Simulate API by sending data directly to the view
+                            System.out.println(registerUser(userModel));
                             Intent newUserIntent = new Intent(RegisterActivity.this, UserAccountActivity.class);
                             newUserIntent.putExtra("userModel", (Serializable) userModel);
                             //Successfully sign up, go to userAccount
@@ -85,7 +93,24 @@ public class RegisterActivity extends AppCompatActivity {
         setTextWatcher();
 
     }
+    private Boolean registerUser(NewUserDataModel userModel) {
+        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        UserService userService = retrofit.create(UserService.class);
+        Call<Boolean> call = userService.registerUser(userModel);
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                isUserRegistered = response.body();
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                isUserRegistered = false;
+                System.out.println(t.toString());
+            }
+        });
+        return isUserRegistered;
 
+    }
 
     private void setTextWatcher() {
         afterTextChangedListener = new TextWatcher() {

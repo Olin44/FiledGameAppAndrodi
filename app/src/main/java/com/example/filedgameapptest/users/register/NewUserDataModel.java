@@ -1,13 +1,30 @@
 package com.example.filedgameapptest.users.register;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
-public class NewUserDataModel implements Serializable {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@SuppressWarnings("serial")
+@Getter
+@Setter
+@ToString
+public class NewUserDataModel implements Serializable {
+    @SerializedName("username")
+    @Expose
     private String username;
+    @SerializedName("email")
+    @Expose
     private String email;
+    @SerializedName("password")
+    @Expose
     private String password;
+    @SerializedName("is_active")
+    @Expose
     private boolean isActive;
 
     public static final class Builder {
