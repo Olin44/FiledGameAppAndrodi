@@ -1,5 +1,6 @@
 package com.example.filedgameapptest.users.register;
 
+import android.text.TextUtils;
 import android.util.Patterns;
 
 import androidx.lifecycle.LiveData;
@@ -34,12 +35,11 @@ public class RegisterViewModel extends ViewModel {
     }
 
     private boolean isEmailValid(String email) {
-        if (email == null) {
+
+        if(email == null || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return false;
-        }
-        if (email.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        } else {
+        } else{
+
             return !email.trim().isEmpty();
         }
     }
