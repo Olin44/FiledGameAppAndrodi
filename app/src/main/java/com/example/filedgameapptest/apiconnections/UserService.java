@@ -1,4 +1,4 @@
-package com.example.filedgameapptest;
+package com.example.filedgameapptest.apiconnections;
 
 import com.example.filedgameapptest.users.register.NewUserDataModel;
 
@@ -8,5 +8,5 @@ import retrofit2.http.POST;
 
 public interface UserService {
     @POST("/users/registerUser")
-    Call<Boolean> registerUser(@Body NewUserDataModel newUserDataModel);
+    Call<NewUserDataModel> registerUser(@Body NewUserDataModel newUserDataModel);
 }

@@ -1,4 +1,6 @@
-package com.example.filedgameapptest;
+package com.example.filedgameapptest.apiconnections;
+
+import com.example.filedgameapptest.apiconnections.models.Map;
 
 import java.util.List;
 

@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.filedgameapptest.BaseURL;
+import com.example.filedgameapptest.apiconnections.BaseURL;
 
-import com.example.filedgameapptest.Map;
-import com.example.filedgameapptest.MapsService;
+import com.example.filedgameapptest.apiconnections.models.Map;
+import com.example.filedgameapptest.apiconnections.MapsService;
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.RetrofitClientInstance;
+import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 
 import retrofit2.Call;
 import retrofit2.Callback;

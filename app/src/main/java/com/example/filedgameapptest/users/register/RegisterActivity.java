@@ -17,10 +17,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.filedgameapptest.MainActivity;
-import com.example.filedgameapptest.MapsService;
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.RetrofitClientInstance;
-import com.example.filedgameapptest.UserService;
+import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
+import com.example.filedgameapptest.apiconnections.UserService;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
 import com.example.filedgameapptest.users.login.LoginActivity;
 
@@ -41,7 +40,10 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText passwordConfEditText;
     private TextWatcher afterTextChangedListener;
     private Boolean isUserRegistered;
+    private NewUserDataModel userFromResponse;
     private AlertDialog.Builder alert;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,37 +86,30 @@ public class RegisterActivity extends AppCompatActivity {
                                     .setPassword(password)
                                     .setIsActive(false)
                                     .build();
-                            isUserRegistered = registerUser(userModel);
-                            if(isUserRegistered){
-                                showAlertDialogOnSuccess();
-                            } else{
-                                showAlertDialogOnFailure();
-                            }
+                            Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+                            UserService userService = retrofit.create(UserService.class);
+                            Call<NewUserDataModel> call = userService.registerUser(userModel);
+                            call.enqueue(new Callback<NewUserDataModel>() {
+                                @Override
+                                public void onResponse(Call<NewUserDataModel> call, Response<NewUserDataModel> response) {
+                                    if (response.isSuccessful()) {
+                                        showAlertDialogOnSuccess();
+                                    } else {
+                                        showAlertDialogOnFailure();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<NewUserDataModel> call, Throwable t) {
+                                    showAlertDialogOnFailure();
+                                }
+                            });
                         }
                     });
                 }
-
             }
         });
         setTextWatcher();
 
-    }
-    private Boolean registerUser(NewUserDataModel userModel) {
-        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
-        UserService userService = retrofit.create(UserService.class);
-        Call<Boolean> call = userService.registerUser(userModel);
-        call.enqueue(new Callback<Boolean>() {
-            @Override
-            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                isUserRegistered = response.body();
-            }
-            @Override
-            public void onFailure(Call<Boolean> call, Throwable t) {
-                isUserRegistered = false;
-                System.out.println(t.toString());
-            }
-        });
-        return isUserRegistered;
     }
 
     private void setTextWatcher() {
@@ -149,16 +144,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void initViews() {
         emailEditText = findViewById(R.id.email);
         usernameEditText = findViewById(R.id.username);
-        ;
         passwordEditText = findViewById(R.id.password);
-        ;
         passwordConfEditText = findViewById(R.id.passwordConf);
-        ;
 
         btnSignUp = findViewById(R.id.btnSignUp);
 
     }
-
     private void showAlertDialogOnSuccess(){
         alert = new AlertDialog.Builder(this).setMessage("Successfully sign up");
         alert.setPositiveButton("Log in", new DialogInterface.OnClickListener() {
@@ -192,6 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
         alert.show();
     }
+
 
 
 }

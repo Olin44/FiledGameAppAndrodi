@@ -1,4 +1,6 @@
-package com.example.filedgameapptest;
+package com.example.filedgameapptest.apiconnections;
+
+import com.example.filedgameapptest.apiconnections.BaseURL;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

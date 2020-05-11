@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+
 import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
 import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.RegisterActivity;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,5 +54,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
 }

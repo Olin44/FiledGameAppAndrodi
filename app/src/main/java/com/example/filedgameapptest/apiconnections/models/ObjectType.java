@@ -1,4 +1,4 @@
-package com.example.filedgameapptest;
+package com.example.filedgameapptest.apiconnections.models;
 
 public enum ObjectType {
     STONE("stone"),

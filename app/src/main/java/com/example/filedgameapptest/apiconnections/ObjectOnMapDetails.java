@@ -1,5 +1,6 @@
-package com.example.filedgameapptest;
+package com.example.filedgameapptest.apiconnections;
 
+import com.example.filedgameapptest.apiconnections.models.ObjectType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -15,19 +16,19 @@ import lombok.ToString;
 @ToString
 public class ObjectOnMapDetails {
     @SerializedName("id")
-    String id;
+    private String id;
 
     @SerializedName("objectType")
     @Expose
-    ObjectType objectType;
+    private ObjectType objectType;
 
     @SerializedName("latLng")
     @Expose
-    LatLng latLng;
+    private LatLng latLng;
 
     @SerializedName("hint")
     @Expose
-    String hint;
+    private String hint;
 
     public String getId() {
         return id;
