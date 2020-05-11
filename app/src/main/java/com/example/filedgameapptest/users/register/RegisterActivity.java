@@ -1,9 +1,11 @@
 package com.example.filedgameapptest.users.register;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
@@ -12,12 +14,15 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.MapsService;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.RetrofitClientInstance;
 import com.example.filedgameapptest.UserService;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
+import com.example.filedgameapptest.users.login.LoginActivity;
 
 import java.io.Serializable;
 
@@ -36,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText passwordConfEditText;
     private TextWatcher afterTextChangedListener;
     private Boolean isUserRegistered;
+    private AlertDialog.Builder alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +84,12 @@ public class RegisterActivity extends AppCompatActivity {
                                     .setPassword(password)
                                     .setIsActive(false)
                                     .build();
-                            //TODO: Add new user to API
-                            System.out.println(registerUser(userModel));
-                            Intent newUserIntent = new Intent(RegisterActivity.this, UserAccountActivity.class);
-                            newUserIntent.putExtra("userModel", (Serializable) userModel);
-                            //Successfully sign up, go to userAccount
-                            startActivity(newUserIntent);
+                            isUserRegistered = registerUser(userModel);
+                            if(isUserRegistered){
+                                showAlertDialogOnSuccess();
+                            } else{
+                                showAlertDialogOnFailure();
+                            }
                         }
                     });
                 }
@@ -109,7 +115,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         return isUserRegistered;
-
     }
 
     private void setTextWatcher() {
@@ -152,6 +157,40 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnSignUp = findViewById(R.id.btnSignUp);
 
+    }
+
+    private void showAlertDialogOnSuccess(){
+        alert = new AlertDialog.Builder(this).setMessage("Successfully sign up");
+        alert.setPositiveButton("Log in", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
+        alert.setNegativeButton("Go back to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(RegisterActivity.this, MainActivity.class));
+            }
+        });
+        alert.show();
+    }
+
+    private void showAlertDialogOnFailure(){
+        alert = new AlertDialog.Builder(this).setMessage("Failed to sign up");
+        alert.setPositiveButton("Go back to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
+        alert.setNegativeButton("Try again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.show();
     }
 
 
