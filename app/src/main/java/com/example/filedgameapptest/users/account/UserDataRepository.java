@@ -7,7 +7,7 @@ import java.util.Observable;
 public class UserDataRepository extends Observable {
     private String username;
     private String email;
-    private String password;
+    private boolean isActive;
     private static UserDataRepository INSTANCE = null;
 
     private UserDataRepository() {
@@ -26,15 +26,15 @@ public class UserDataRepository extends Observable {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                setUserData("changed", "data", "observer");
+                setUserData("changed", "data", true);
             }
-        }, 5000);
+        }, 500000);
     }
 
-    public void setUserData(String username, String email, String password) {
+    public void setUserData(String username, String email, Boolean isActive) {
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.isActive = isActive;
         setChanged();
         notifyObservers();
     }
@@ -47,7 +47,7 @@ public class UserDataRepository extends Observable {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public Boolean getIsActive(){
+        return isActive;
     }
 }

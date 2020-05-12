@@ -3,11 +3,13 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,6 +20,9 @@ import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.UserService;
+import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
+import com.example.filedgameapptest.users.account.UserAccountActivity;
+import com.example.filedgameapptest.users.account.UserDataRepository;
 import com.example.filedgameapptest.users.register.NewUserDataModel;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 
@@ -34,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnSignIn;
     private AlertDialog.Builder alert;
     private LoginViewModel loginViewModel;
+    private NewUserDataModel loggedUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,8 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<NewUserDataModel> call, Response<NewUserDataModel> response) {
                                     if (response.isSuccessful()) {
-                                        NewUserDataModel loggedUser = response.body();
-                                        //^tutaj  masz dane usera
+                                        loggedUser = response.body();
+                                        setUserDataRepository();
                                         showAlertDialogOnSuccess();
                                     } else {
                                         showAlertDialogOnFailure();
@@ -82,7 +88,6 @@ public class LoginActivity extends AppCompatActivity {
                                     showAlertDialogOnFailure();
                                 }
                             });
-                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -126,38 +131,43 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void showAlertDialogOnSuccess(){
-        //TODO: implement this
-//        alert = new AlertDialog.Builder(this).setMessage("Successfully sign up");
-//        alert.setPositiveButton("Log in", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity( new Intent(RegisterActivity.this, LoginActivity.class));
-//            }
-//        });
-//        alert.setNegativeButton("Go back to menu", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity( new Intent(RegisterActivity.this, MainActivity.class));
-//            }
-//        });
-//        alert.show();
+
+        alert = new AlertDialog.Builder(this).setMessage("Successfully sign in");
+        alert.setPositiveButton("Go to my account", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(LoginActivity.this, UserAccountActivity.class));
+            }
+        });
+        alert.setNegativeButton("Go to scan QR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(LoginActivity.this, ScannedBarcodeActivity.class));
+            }
+        });
+        alert.show();
+
     }
 
     private void showAlertDialogOnFailure(){
-        //TODO: implement this
-//        alert = new AlertDialog.Builder(this).setMessage("Failed to sign up");
-//        alert.setPositiveButton("Go back to menu", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity( new Intent(RegisterActivity.this, LoginActivity.class));
-//            }
-//        });
-//        alert.setNegativeButton("Try again", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        alert.show();
+        alert = new AlertDialog.Builder(this).setMessage("Failed to sign in");
+        alert.setPositiveButton("Go back to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
+        alert.setNegativeButton("Try again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.show();
+    }
+
+    private void setUserDataRepository(){
+        UserDataRepository userDataRepository = UserDataRepository.getInstance();
+        userDataRepository.setUserData(loggedUser.getUsername(),loggedUser.getEmail(),loggedUser.isActive());
     }
 }

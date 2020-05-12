@@ -4,60 +4,75 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
+import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
+import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.NewUserDataModel;
+import com.example.filedgameapptest.users.register.RegisterActivity;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class UserAccountActivity extends AppCompatActivity implements Observer {
+public class UserAccountActivity extends AppCompatActivity implements Observer, View.OnClickListener{
 
-    private Intent incomingIntent;
     private TextView emailTextView;
     private TextView usernameTextView;
-    private TextView passwordTextView;
-    private NewUserDataModel userModel;
-    private Observable mUserDataRepositoryObservable;
 
+    private Button btnShowStats;
+    private Button btnLogOut;
+
+    private Observable mUserDataRepositoryObservable;
+    private UserDataRepository userDataRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_account);
 
-        setIncomingIntent();
-        setDataFromIntent();
-
         initViews();
-        setTextViews();
 
-        //Observer + Singleton
         mUserDataRepositoryObservable = UserDataRepository.getInstance();
+        userDataRepository = UserDataRepository.getInstance();
+        setTextViews();
         mUserDataRepositoryObservable.addObserver(this);
 
     }
 
-    private void setTextViews() {
-        emailTextView.setText(userModel.getEmail());
-        passwordTextView.setText(userModel.getPassword());
-        usernameTextView.setText(userModel.getUsername());
+    private void  setTextViews(){
+        emailTextView.setText(userDataRepository.getEmail());
+        usernameTextView.setText(userDataRepository.getUsername());
     }
-
-    private void setIncomingIntent() {
-        incomingIntent = getIntent();
-    }
-
-    private void setDataFromIntent() {
-        userModel = (NewUserDataModel) incomingIntent.getSerializableExtra("userModel");
-    }
-
 
     private void initViews() {
         emailTextView = findViewById(R.id.emailTextView);
         usernameTextView = findViewById(R.id.usernameTextView);
-        passwordTextView = findViewById(R.id.passwordTextView);
+
+        btnShowStats = findViewById(R.id.btnShowStats);
+        btnShowStats.setOnClickListener(this);
+        btnLogOut = findViewById(R.id.btnLogOut);
+        btnLogOut.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.btnShowStats:
+                //TODO Implement ShowStatsActivity
+                Toast.makeText(getApplicationContext(), "Stats", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnLogOut:
+                //TODO Implement LogOut
+                Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 
     @Override
@@ -65,7 +80,6 @@ public class UserAccountActivity extends AppCompatActivity implements Observer {
         if (observable instanceof UserDataRepository) {
             UserDataRepository userDataRepository = (UserDataRepository) observable;
             emailTextView.setText(userDataRepository.getEmail());
-            passwordTextView.setText(userDataRepository.getPassword());
             usernameTextView.setText(userDataRepository.getUsername());
         }
     }
