@@ -11,7 +11,7 @@ public class LogoutUserDTO {
         return email;
     }
 
-    LogoutUserDTO(String email) {
+    public LogoutUserDTO(String email) {
         this.email = email;
     }
 }

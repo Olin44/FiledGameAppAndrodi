@@ -16,6 +16,7 @@ import com.example.filedgameapptest.apiconnections.models.Map;
 import com.example.filedgameapptest.apiconnections.MapsService;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
+import com.example.filedgameapptest.maps.data.MapDataRepository;
 import com.example.filedgameapptest.users.data.UserDataRepository;
 
 import retrofit2.Call;
@@ -30,14 +31,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     private TextView txtResponse;
     private String url;
     private Map map;
-    private UserDataRepository userDataRepository = UserDataRepository.getInstance();
-    private GameUserDTO gameUserDTO;
-    //TODO: tak wygląda ten obiekt {
-    //  "mapId": "string",
-    //  "userId": "string",
-    //  "points": string,
-    //  "active": true
-    //}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +42,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
         initViews();
         txtResponse.setText(url);
         requestMap();
-        addNewUserGameToUser();
-
-    }
-    private void addNewUserGameToUser() {
-        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
-        GameService gameService = retrofit.create(GameService.class);
-        Call<GameUserDTO> call = gameService.registerUser(userDataRepository.getId(), map.getId());
-        call.enqueue(new Callback<GameUserDTO>() {
-            @Override
-            public void onResponse(Call<GameUserDTO> call, Response<GameUserDTO> response) {
-                if(response.isSuccessful()){
-                    gameUserDTO = response.body();
-                }
-                //:TODO dorób tu obsługę tego jak jest git to niech co się dzieje, a jak nie to się pojawia jakiś monit typu tryAgain
-            }
-            @Override
-            public void onFailure(Call<GameUserDTO> call, Throwable t) {
-                System.out.println(t.toString());
-            }
-        });
 
     }
 
@@ -81,8 +54,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<Map> call, Response<Map> response) {
                 map = response.body();
-                String responseAsString = map.toString();
-                txtResponse.setText(responseAsString);
+                setMapDataRepository();
             }
 
             @Override
@@ -114,6 +86,11 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
         btnRequest.setOnClickListener(this);
         btnStartNewMapActivity.setOnClickListener(this);
 
+    }
+
+    private void setMapDataRepository(){
+        MapDataRepository mapDataRepository = MapDataRepository.getInstance();
+        mapDataRepository.setAllData(map.getId(),map.getName(), map.getObjectOnMapDetails());
     }
 
 
