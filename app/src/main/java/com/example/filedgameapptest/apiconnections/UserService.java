@@ -1,5 +1,6 @@
 package com.example.filedgameapptest.apiconnections;
 
+import com.example.filedgameapptest.users.account.LogoutUserDTO;
 import com.example.filedgameapptest.users.login.LoginUserDTO;
 import com.example.filedgameapptest.users.register.NewUserDataModel;
 
@@ -13,4 +14,7 @@ public interface UserService {
 
     @POST("/users/login")
     Call<NewUserDataModel> login(@Body LoginUserDTO newUserDataModel);
+
+    @POST("/users/logout")
+    Call<LogoutUserDTO> logout(@Body LogoutUserDTO logoutUserDTO);
 }

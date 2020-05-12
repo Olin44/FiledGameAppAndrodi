@@ -26,6 +26,8 @@ import com.example.filedgameapptest.users.account.UserDataRepository;
 import com.example.filedgameapptest.users.register.NewUserDataModel;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 
+import java.util.Observable;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private NewUserDataModel loggedUser;
 
+    private Observable mUserDataRepositoryObservable;
+    private UserDataRepository userDataRepository;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         initViews();
 
         loginViewModel = new LoginViewModel();
+
+        mUserDataRepositoryObservable = UserDataRepository.getInstance();
+        userDataRepository = UserDataRepository.getInstance();
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -169,5 +177,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setUserDataRepository(){
         UserDataRepository userDataRepository = UserDataRepository.getInstance();
         userDataRepository.setUserData(loggedUser.getUsername(),loggedUser.getEmail(),loggedUser.isActive());
+        userDataRepository.setId(loggedUser.getId());
+
     }
 }

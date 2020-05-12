@@ -14,6 +14,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class NewUserDataModel implements Serializable {
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("username")
     @Expose
     private String username;
@@ -26,6 +29,10 @@ public class NewUserDataModel implements Serializable {
     @SerializedName("is_active")
     @Expose
     private boolean isActive;
+
+    public String getId() {
+        return id;
+    }
 
     public static final class Builder {
         private String username;

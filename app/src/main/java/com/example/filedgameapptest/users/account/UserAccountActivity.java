@@ -1,7 +1,9 @@
 package com.example.filedgameapptest.users.account;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,13 +13,21 @@ import android.widget.Toast;
 
 import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
+import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
+import com.example.filedgameapptest.apiconnections.UserService;
 import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
 import com.example.filedgameapptest.users.login.LoginActivity;
+import com.example.filedgameapptest.users.login.LoginUserDTO;
 import com.example.filedgameapptest.users.register.NewUserDataModel;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 
 import java.util.Observable;
 import java.util.Observer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class UserAccountActivity extends AppCompatActivity implements Observer, View.OnClickListener{
 
@@ -29,6 +39,8 @@ public class UserAccountActivity extends AppCompatActivity implements Observer, 
 
     private Observable mUserDataRepositoryObservable;
     private UserDataRepository userDataRepository;
+    private AlertDialog.Builder alert;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +53,6 @@ public class UserAccountActivity extends AppCompatActivity implements Observer, 
         userDataRepository = UserDataRepository.getInstance();
         setTextViews();
         mUserDataRepositoryObservable.addObserver(this);
-
     }
 
     private void  setTextViews(){
@@ -68,8 +79,25 @@ public class UserAccountActivity extends AppCompatActivity implements Observer, 
                 Toast.makeText(getApplicationContext(), "Stats", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnLogOut:
-                //TODO Implement LogOut
-                Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_SHORT).show();
+                LogoutUserDTO logoutUserDTO  = new LogoutUserDTO(userDataRepository.getEmail());
+                Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+                UserService userService = retrofit.create(UserService.class);
+                Call<LogoutUserDTO> call = userService.logout(logoutUserDTO);
+                call.enqueue(new Callback<LogoutUserDTO>() {
+                    @Override
+                    public void onResponse(Call<LogoutUserDTO> call, Response<LogoutUserDTO> response) {
+                        if (response.isSuccessful()) {
+                            userDataRepository.deleteAllData();
+                            showAlertDialogOnSuccess();
+                        } else {
+                            showAlertDialogOnFailure();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<LogoutUserDTO> call, Throwable t) {
+                        showAlertDialogOnFailure();
+                    }
+                });
                 break;
         }
 
@@ -89,4 +117,39 @@ public class UserAccountActivity extends AppCompatActivity implements Observer, 
         super.onDestroy();
         mUserDataRepositoryObservable.deleteObserver(this);
     }
+
+    private void showAlertDialogOnSuccess(){
+        alert = new AlertDialog.Builder(this).setMessage("Successfully logout");
+        alert.setPositiveButton("Log in", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(UserAccountActivity.this, LoginActivity.class));
+            }
+        });
+        alert.setNegativeButton("Go back to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(UserAccountActivity.this, MainActivity.class));
+            }
+        });
+        alert.show();
+    }
+
+    private void showAlertDialogOnFailure(){
+        alert = new AlertDialog.Builder(this).setMessage("Failed to logout");
+        alert.setPositiveButton("Go back to menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity( new Intent(UserAccountActivity.this, MainActivity.class));
+            }
+        });
+        alert.setNegativeButton("Try again", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.show();
+    }
+
 }
