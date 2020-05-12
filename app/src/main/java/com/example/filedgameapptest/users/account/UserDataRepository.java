@@ -71,6 +71,8 @@ public class UserDataRepository extends Observable {
 
     public void setId(String id) {
         this.id = id;
+        setChanged();
+        notifyObservers();
     }
 
     public void setUsername(String username) {
