@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.users.login;
+package com.example.filedgameapptest.users.data;
 
 public class LoginUserDTO {
     private String password;

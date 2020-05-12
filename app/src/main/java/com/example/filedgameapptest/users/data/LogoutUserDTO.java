@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.users.account;
+package com.example.filedgameapptest.users.data;
 
 public class LogoutUserDTO {
     private String email;

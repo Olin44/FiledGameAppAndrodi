@@ -1,15 +1,12 @@
 package com.example.filedgameapptest.users.login;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CancellationSignal;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -22,9 +19,9 @@ import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.UserService;
 import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
-import com.example.filedgameapptest.users.account.UserDataRepository;
-import com.example.filedgameapptest.users.register.NewUserDataModel;
-import com.example.filedgameapptest.users.register.RegisterActivity;
+import com.example.filedgameapptest.users.data.LoginUserDTO;
+import com.example.filedgameapptest.users.data.UserDataRepository;
+import com.example.filedgameapptest.users.data.NewUserDataModel;
 
 import java.util.Observable;
 

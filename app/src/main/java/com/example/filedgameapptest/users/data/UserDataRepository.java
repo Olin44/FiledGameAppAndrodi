@@ -1,20 +1,12 @@
-package com.example.filedgameapptest.users.account;
+package com.example.filedgameapptest.users.data;
 
 import android.os.Handler;
 
 import java.util.Observable;
 
 public class UserDataRepository extends Observable {
+
     private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
     private String username;
     private String email;
     private boolean isActive;
@@ -67,6 +59,10 @@ public class UserDataRepository extends Observable {
 
     public Boolean getIsActive(){
         return isActive;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {

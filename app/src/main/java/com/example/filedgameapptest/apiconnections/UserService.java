@@ -1,8 +1,8 @@
 package com.example.filedgameapptest.apiconnections;
 
-import com.example.filedgameapptest.users.account.LogoutUserDTO;
-import com.example.filedgameapptest.users.login.LoginUserDTO;
-import com.example.filedgameapptest.users.register.NewUserDataModel;
+import com.example.filedgameapptest.users.data.LogoutUserDTO;
+import com.example.filedgameapptest.users.data.LoginUserDTO;
+import com.example.filedgameapptest.users.data.NewUserDataModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

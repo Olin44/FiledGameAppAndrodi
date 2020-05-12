@@ -16,7 +16,7 @@ import com.example.filedgameapptest.apiconnections.models.Map;
 import com.example.filedgameapptest.apiconnections.MapsService;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
-import com.example.filedgameapptest.users.account.UserDataRepository;
+import com.example.filedgameapptest.users.data.UserDataRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,7 +67,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(Call<GameUserDTO> call, Throwable t) {
                 System.out.println(t.toString());
-                //:TODO tutaj też ten monit
             }
         });
 

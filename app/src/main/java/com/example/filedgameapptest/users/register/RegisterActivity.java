@@ -20,10 +20,8 @@ import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.UserService;
-import com.example.filedgameapptest.users.account.UserAccountActivity;
+import com.example.filedgameapptest.users.data.NewUserDataModel;
 import com.example.filedgameapptest.users.login.LoginActivity;
-
-import java.io.Serializable;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -15,11 +15,9 @@ import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.UserService;
-import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
+import com.example.filedgameapptest.users.data.LogoutUserDTO;
+import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
-import com.example.filedgameapptest.users.login.LoginUserDTO;
-import com.example.filedgameapptest.users.register.NewUserDataModel;
-import com.example.filedgameapptest.users.register.RegisterActivity;
 
 import java.util.Observable;
 import java.util.Observer;

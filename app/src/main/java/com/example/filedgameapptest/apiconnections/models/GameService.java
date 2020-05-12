@@ -1,7 +1,5 @@
 package com.example.filedgameapptest.apiconnections.models;
 
-import com.example.filedgameapptest.users.register.NewUserDataModel;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

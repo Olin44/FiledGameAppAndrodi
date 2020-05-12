@@ -1,4 +1,4 @@
-package com.example.filedgameapptest.users.register;
+package com.example.filedgameapptest.users.data;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
