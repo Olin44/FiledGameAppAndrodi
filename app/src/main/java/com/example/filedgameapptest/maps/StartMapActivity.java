@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.filedgameapptest.apiconnections.BaseURL;
 
@@ -25,8 +26,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class StartMapActivity extends AppCompatActivity implements View.OnClickListener{
-
-    private Button btnRequest;
+    
     private Button btnStartNewMapActivity;
     private TextView txtResponse;
     private String url;
@@ -40,7 +40,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
         url = incomingIntent.getStringExtra("url");
 
         initViews();
-        txtResponse.setText(url);
         requestMap();
 
     }
@@ -54,11 +53,15 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<Map> call, Response<Map> response) {
                 map = response.body();
+                txtResponse.setText(map.getName());
                 setMapDataRepository();
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                btnStartNewMapActivity.setEnabled(true);
             }
 
             @Override
             public void onFailure(Call<Map> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
                 System.out.println(t.toString());
             }
         });
@@ -68,8 +71,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.btnRequest:
-                break;
             case R.id.btnStartNewMapActivity:
                 startActivity(new Intent(StartMapActivity.this, MapsActivity.class));
                 break;
@@ -79,11 +80,10 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void initViews() {
-        btnRequest = findViewById(R.id.btnRequest);
         btnStartNewMapActivity = findViewById(R.id.btnStartNewMapActivity);
         txtResponse = findViewById(R.id.txtResponse);
+        btnStartNewMapActivity.setEnabled(false);
 
-        btnRequest.setOnClickListener(this);
         btnStartNewMapActivity.setOnClickListener(this);
 
     }
