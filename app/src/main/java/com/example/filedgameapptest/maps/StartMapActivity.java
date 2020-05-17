@@ -26,7 +26,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class StartMapActivity extends AppCompatActivity implements View.OnClickListener{
-    
+
     private Button btnStartNewMapActivity;
     private TextView txtResponse;
     private String url;
@@ -61,7 +61,8 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<Map> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Please try again", Toast.LENGTH_SHORT).show();
+                txtResponse.setText(t.toString());
+                //Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
                 System.out.println(t.toString());
             }
         });
