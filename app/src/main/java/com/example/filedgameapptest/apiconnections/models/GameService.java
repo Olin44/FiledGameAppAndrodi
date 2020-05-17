@@ -5,6 +5,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface GameService {
-    @GET("addNewUserGameToUser/{userId}/{mapId}")
+    @GET("/game/addNewUserGameToUser/{userId}/{mapId}")
     Call<GameUserDTO> registerUser(@Path("userId") String userId, @Path("mapId") String mapId);
 }
