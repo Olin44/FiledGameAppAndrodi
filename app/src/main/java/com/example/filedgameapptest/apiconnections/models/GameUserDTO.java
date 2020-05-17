@@ -5,7 +5,7 @@ public class GameUserDTO {
     String mapId;
     String userId;
     Long points;
-    boolean isActive;
+    boolean active;
 
     public void setMapId(String mapId) {
         this.mapId = mapId;
@@ -20,7 +20,7 @@ public class GameUserDTO {
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        active = active;
     }
 
     public String getMapId() {
@@ -36,7 +36,7 @@ public class GameUserDTO {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
 
@@ -46,5 +46,16 @@ public class GameUserDTO {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "GameUserDTO{" +
+                "id='" + id + '\'' +
+                ", mapId='" + mapId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", points=" + points +
+                ", isActive=" + active +
+                '}';
     }
 }

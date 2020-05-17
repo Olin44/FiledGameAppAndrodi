@@ -84,6 +84,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void setNewGame() {
         GameDataRepository gameDataRepository = GameDataRepository.getInstance();
-        gameDataRepository.setAllData(gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), true);
+        gameDataRepository.setAllData(gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), gameUserDTO.isActive());
     }
 }
