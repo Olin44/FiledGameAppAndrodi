@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
+import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 

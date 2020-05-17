@@ -11,14 +11,11 @@ import android.widget.Toast;
 
 import com.example.filedgameapptest.apiconnections.BaseURL;
 
-import com.example.filedgameapptest.apiconnections.models.GameService;
-import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.apiconnections.models.Map;
 import com.example.filedgameapptest.apiconnections.MapsService;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
-import com.example.filedgameapptest.users.data.UserDataRepository;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,7 +70,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
 
         switch (v.getId()) {
             case R.id.btnStartNewMapActivity:
-                startActivity(new Intent(StartMapActivity.this, MapsActivity.class));
+                startActivity(new Intent(StartMapActivity.this, MapActivity.class));
                 break;
 
         }
