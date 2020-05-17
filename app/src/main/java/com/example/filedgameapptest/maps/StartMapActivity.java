@@ -37,7 +37,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_map);
         //Intent incomingIntent = getIntent();
-        url = BaseURL.baseURL + "/maps/getMapById/1";
+        url = BaseURL.baseURL + "maps/getMapById/1";
 
         initViews();
         requestMap();

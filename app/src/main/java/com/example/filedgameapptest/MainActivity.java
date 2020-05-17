@@ -14,7 +14,7 @@ import com.example.filedgameapptest.users.register.RegisterActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    
+
     private Button btnLogIn;
     private Button btnSignUp;
 
