@@ -28,12 +28,13 @@ public class UserDataRepository extends Observable {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                setUserData("changed", "data", true);
+                setUserData("67", "changed", "data", true);
             }
         }, 500000);
     }
 
-    public void setUserData(String username, String email, Boolean isActive) {
+    public void setUserData(String id, String username, String email, Boolean isActive) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.isActive = isActive;

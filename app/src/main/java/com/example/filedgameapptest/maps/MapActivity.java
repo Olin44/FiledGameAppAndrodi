@@ -73,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setNewGame() {
-        gameDataRepository.setAllData(gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), gameUserDTO.isActive());
+        gameDataRepository.setAllData(gameUserDTO.getId(), gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), gameUserDTO.isActive());
     }
 
     @Override

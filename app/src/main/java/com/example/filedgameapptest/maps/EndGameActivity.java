@@ -10,10 +10,21 @@ import android.widget.TextView;
 
 import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
+import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
+import com.example.filedgameapptest.apiconnections.UserService;
+import com.example.filedgameapptest.apiconnections.models.GameService;
+import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
+import com.example.filedgameapptest.users.data.LogoutUserDTO;
+import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.RegisterActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class EndGameActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -24,6 +35,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     private TextView txtEndMessage;
     private TextView txtResult;
 
+    private UserDataRepository userDataRepository = UserDataRepository.getInstance();
     private GameDataRepository gameDataRepository = GameDataRepository.getInstance();
 
 
@@ -74,10 +86,54 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void LogOut() {
-        //TODO: Jacek to implement logout and clear data
+        LogoutUserDTO logoutUserDTO  = new LogoutUserDTO(userDataRepository.getEmail());
+        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        UserService userService = retrofit.create(UserService.class);
+        Call<LogoutUserDTO> call = userService.logout(logoutUserDTO);
+        call.enqueue(new Callback<LogoutUserDTO>() {
+            @Override
+            public void onResponse(Call<LogoutUserDTO> call, Response<LogoutUserDTO> response) {
+                if (response.isSuccessful()) {
+                    userDataRepository.deleteAllData();
+                    //TODO: Monika implement activity on success
+                } else {
+                    //TODO: Monika implement activity on failure
+
+                }
+            }
+            @Override
+            public void onFailure(Call<LogoutUserDTO> call, Throwable t) {
+                //TODO: Monika implement activity on failure
+            }
+        });
+
     }
 
     private void endGame(){
-        //TODO Jacek to implement sending data (gameDataRepository) to server and end game
+        GameUserDTO gameUserDTO = new GameUserDTO();
+        gameUserDTO.setActive(gameDataRepository.getActive());
+        gameUserDTO.setUserId(gameDataRepository.getUserId());
+        gameUserDTO.setId(gameDataRepository.getId());
+        gameUserDTO.setMapId(gameDataRepository.getMapId());
+        gameUserDTO.setPoints(gameDataRepository.getPoints());
+        Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
+        GameService gameService = retrofit.create(GameService.class);
+        Call<GameUserDTO> call = gameService.saveResults(gameUserDTO);
+        call.enqueue(new Callback<GameUserDTO>() {
+            @Override
+            public void onResponse(Call<GameUserDTO> call, Response<GameUserDTO> response) {
+                if(response.isSuccessful()) {
+                    System.out.println(response.body().toString());
+                }else{
+                    //TODO: Monika implement activity on failure
+
+                }
+            }
+            @Override
+            public void onFailure(Call<GameUserDTO> call, Throwable t) {
+                //TODO: Monika implement activity on failure
+            }
+        });
+
     }
 }

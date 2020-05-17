@@ -1,7 +1,7 @@
 package com.example.filedgameapptest.maps.data;
 
 public class GameDataRepository {
-
+    private String id;
     private String mapId;
     private String userId;
     private Long points;
@@ -19,7 +19,8 @@ public class GameDataRepository {
         GameDataRepository.INSTANCE = INSTANCE;
     }
 
-    public void setAllData(String mapId, String userId, Long points, Boolean isActive){
+    public void setAllData(String id, String mapId, String userId, Long points, Boolean isActive){
+        this.id = id;
         this.mapId = mapId;
         this.userId = userId;
         this.points = points;
@@ -31,6 +32,14 @@ public class GameDataRepository {
         userId = null;
         points = null;
         isActive = null;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMapId() {

@@ -175,8 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setUserDataRepository(){
         UserDataRepository userDataRepository = UserDataRepository.getInstance();
-        userDataRepository.setUserData(loggedUser.getUsername(),loggedUser.getEmail(),true);
-        userDataRepository.setId(loggedUser.getId());
+        userDataRepository.setUserData(loggedUser.getId(), loggedUser.getUsername(),loggedUser.getEmail(),true);
 
     }
 }
