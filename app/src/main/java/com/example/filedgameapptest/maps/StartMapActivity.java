@@ -54,7 +54,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             public void onResponse(Call<Map> call, Response<Map> response) {
                 map = response.body();
                 txtResponse.setText(map.getName());
-                //setMapDataRepository();
+                setMapDataRepository();
                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 btnStartNewMapActivity.setEnabled(true);
             }
@@ -62,7 +62,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(Call<Map> call, Throwable t) {
                 txtResponse.setText(t.toString());
-                //Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
                 System.out.println(t.toString());
             }
         });
@@ -84,7 +84,6 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
         btnStartNewMapActivity = findViewById(R.id.btnStartNewMapActivity);
         txtResponse = findViewById(R.id.txtResponse);
         btnStartNewMapActivity.setEnabled(false);
-
         btnStartNewMapActivity.setOnClickListener(this);
 
     }
