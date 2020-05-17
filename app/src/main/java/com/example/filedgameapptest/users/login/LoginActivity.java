@@ -18,6 +18,7 @@ import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.UserService;
 import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
+import com.example.filedgameapptest.maps.StartMapActivity;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
 import com.example.filedgameapptest.users.data.LoginUserDTO;
 import com.example.filedgameapptest.users.data.UserDataRepository;
@@ -144,10 +145,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity( new Intent(LoginActivity.this, UserAccountActivity.class));
             }
         });
-        alert.setNegativeButton("Go to scan QR", new DialogInterface.OnClickListener() {
+        //TODO: to change after tests, it should go to ScannedBarcodeActivity
+        alert.setNegativeButton("Go to scan start map", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity( new Intent(LoginActivity.this, ScannedBarcodeActivity.class));
+                startActivity( new Intent(LoginActivity.this, StartMapActivity.class));
             }
         });
         alert.show();

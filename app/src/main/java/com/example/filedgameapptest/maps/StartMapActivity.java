@@ -36,8 +36,8 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_map);
-        Intent incomingIntent = getIntent();
-        url = incomingIntent.getStringExtra("url");
+        //Intent incomingIntent = getIntent();
+        url = BaseURL.baseURL + "/maps/getMapById/1";
 
         initViews();
         requestMap();
@@ -54,7 +54,7 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             public void onResponse(Call<Map> call, Response<Map> response) {
                 map = response.body();
                 txtResponse.setText(map.getName());
-                setMapDataRepository();
+                //setMapDataRepository();
                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 btnStartNewMapActivity.setEnabled(true);
             }
