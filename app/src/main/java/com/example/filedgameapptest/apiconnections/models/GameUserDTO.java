@@ -1,6 +1,7 @@
 package com.example.filedgameapptest.apiconnections.models;
 
 public class GameUserDTO {
+    String id;
     String mapId;
     String userId;
     Long points;
@@ -36,5 +37,14 @@ public class GameUserDTO {
 
     public boolean isActive() {
         return isActive;
+    }
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 }
