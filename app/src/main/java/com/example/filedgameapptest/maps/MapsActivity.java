@@ -3,11 +3,13 @@ package com.example.filedgameapptest.maps;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.models.GameService;
 import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
+import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
 import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,12 +29,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private UserDataRepository userDataRepository = UserDataRepository.getInstance();
     private GameUserDTO gameUserDTO;
-    //TODO: tak wygląda ten obiekt {
-    //  "mapId": "string",
-    //  "userId": "string",
-    //  "points": string,
-    //  "active": true
-    //}
     private MapDataRepository mapDataRepository = MapDataRepository.getInstance();
 
     @Override
@@ -73,10 +69,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         call.enqueue(new Callback<GameUserDTO>() {
             @Override
             public void onResponse(Call<GameUserDTO> call, Response<GameUserDTO> response) {
-                if(response.isSuccessful()){
+                if(response.isSuccessful()) {
                     gameUserDTO = response.body();
+                    setNewGame();
                 }
-                //:TODO dorób tu obsługę tego jak jest git to niech co się dzieje, a jak nie to się pojawia jakiś monit typu tryAgain
             }
             @Override
             public void onFailure(Call<GameUserDTO> call, Throwable t) {
@@ -84,5 +80,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+    }
+
+    private void setNewGame() {
+        GameDataRepository gameDataRepository = GameDataRepository.getInstance();
+        gameDataRepository.setAllData(gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), true);
     }
 }
