@@ -21,6 +21,7 @@ import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.models.GameService;
 import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
+import com.example.filedgameapptest.imagerecognition.ImageRecognition;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
 import com.example.filedgameapptest.users.data.UserDataRepository;
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -53,13 +55,19 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class MapFragment extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private LatLng userLocation;
-    private static final String TAG = "MapFragment";
-    private LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
+    private static final String TAG = "MapFragment";
+
+    private GoogleMap mMap;
+    private LatLng userLocation;
+    private LatLng objectLocation;
+    private LocationRequest mLocationRequest;
+    private MarkerOptions objectMarker;
+
+    private ImageRecognition imageRecognition = new ImageRecognition();
 
 
     @Override
@@ -71,8 +79,29 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
+    private void setObjectOnMap() {
+        Log.d(TAG, "setObjectOnMap: called.");
+        objectLocation = new LatLng(50,19);
+        objectMarker = new MarkerOptions().position(objectLocation).title("Object location");
+        mMap.addMarker(objectMarker);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(objectLocation, 10));
+    }
+    private boolean isObjectFound(){
+        //Send img to imageRecognition and check response
+        return imageRecognition.isFoundObject();
+    }
+    private void getPicture(){
+        //Run camera, take picture
+        if(isObjectFound()){
+            //Go to next object, setObjectOnMap
+        }
+        else {
+            //alert, go back to map
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -89,8 +118,7 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
             googleMap.setMyLocationEnabled(true);
         }
             mMap = googleMap;
-            //mMap.addMarker(new MarkerOptions().position((userLocation)).title("Start location"));
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 21.0F));
+            setObjectOnMap();
 
     }
 
@@ -113,7 +141,6 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
         SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
@@ -155,8 +182,7 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
         //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position((userLocation)).title("Start location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 20.0F));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
     }
 
 
@@ -176,4 +202,9 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
     }
 
+    @Override
+    protected void onDestroy() {
+        //TODO Jacek closing the game
+        super.onDestroy();
+    }
 }
