@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.filedgameapptest.apiconnections.BaseURL;
+import com.example.filedgameapptest.util.BaseURL;
 
 import com.example.filedgameapptest.apiconnections.models.Map;
 import com.example.filedgameapptest.apiconnections.MapsService;

@@ -74,20 +74,30 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_map);
-        startLocationUpdates();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        if(checkPermissions()) {
+            googleMap.setMyLocationEnabled(true);
+        }
+        mMap = googleMap;
+        startLocationUpdates();
+        setObjectOnMap();
+    }
+
 
     private void setObjectOnMap() {
         Log.d(TAG, "setObjectOnMap: called.");
-        objectLocation = new LatLng(50,19);
+        //Get object location
+        objectLocation = new LatLng(50.0855076,19.9089341);
         objectMarker = new MarkerOptions().position(objectLocation).title("Object location");
         mMap.addMarker(objectMarker);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(objectLocation, 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(objectLocation, 15));
     }
     private boolean isObjectFound(){
         //Send img to imageRecognition and check response
@@ -101,25 +111,6 @@ public class MapFragment extends FragmentActivity implements OnMapReadyCallback 
         else {
             //alert, go back to map
         }
-    }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        if(checkPermissions()) {
-            googleMap.setMyLocationEnabled(true);
-        }
-            mMap = googleMap;
-            setObjectOnMap();
-
     }
 
     // Trigger new location updates at interval
