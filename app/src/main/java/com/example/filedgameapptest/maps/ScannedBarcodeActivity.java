@@ -27,13 +27,14 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import static com.example.filedgameapptest.util.Constants.PERMISSIONS_REQUEST_CAMERA_PERMISSION;
+
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
     SurfaceView surfaceView;
     TextView txtBarcodeValue;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button btnAction;
     String intentData = "";
     boolean isURL = false;
@@ -59,7 +60,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                 if (intentData.length() > 0) {
                     if (isURL)
-                        //tutaj zaznaczasz co chcesz żeby ci przesłało do klasy StartMap
                         startActivity(new Intent(com.example.filedgameapptest.maps.ScannedBarcodeActivity.this, StartMapActivity.class).putExtra("url", intentData));
                     else {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
@@ -92,7 +92,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                         cameraSource.start(surfaceView.getHolder());
                     } else {
                         ActivityCompat.requestPermissions(com.example.filedgameapptest.maps.ScannedBarcodeActivity.this, new
-                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                                String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA_PERMISSION);
                     }
 
                 } catch (IOException e) {

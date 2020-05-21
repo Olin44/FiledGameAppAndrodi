@@ -1,6 +1,7 @@
 package com.example.filedgameapptest.maps;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,6 +23,7 @@ import com.example.filedgameapptest.apiconnections.ObjectOnMapDetails;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.models.GameService;
 import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
+import com.example.filedgameapptest.imagerecognition.CameraActivity;
 import com.example.filedgameapptest.imagerecognition.ImageRecognition;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
@@ -98,6 +100,24 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: called.");
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                boolean isObjectFoud = data.getBooleanExtra("isCorrectObject",false);
+                if(isObjectFoud){
+                    //TODO:Monika Go to next object
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Try again!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+
     private void addNewUserGameToUser() {
         Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         GameService gameService = retrofit.create(GameService.class);
@@ -135,8 +155,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void runCamera() {
-        //TODO: Monika to implement launching camera
-        Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_SHORT).show();
+        startActivityForResult(new Intent(this, CameraActivity.class).putExtra("currectObjectType", currentObject.getObjectType()), 1);
     }
 
     @Override
@@ -157,10 +176,6 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         objectMarker = new MarkerOptions().position(objectLocation).title("Object location");
         mMap.addMarker(objectMarker);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(objectLocation, 15));
-    }
-    private boolean isObjectFound(){
-        //Send img to imageRecognition and check response
-        return imageRecognition.isFoundObject();
     }
 
     // Trigger new location updates at interval
