@@ -11,13 +11,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
 import com.example.filedgameapptest.apiconnections.ObjectOnMapDetails;
 import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
@@ -27,7 +27,6 @@ import com.example.filedgameapptest.imagerecognition.CameraActivity;
 import com.example.filedgameapptest.imagerecognition.ImageRecognition;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
-import com.example.filedgameapptest.users.account.UserAccountActivity;
 import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -45,6 +44,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,16 +79,25 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
     private ImageRecognition imageRecognition = new ImageRecognition();
 
+    private CountDownTimer countDownTimer;
+    //Tu ustawiasz czas ile timer się liczy
+    private Long mTimeLeftInMillis = 600000L;
+    private TextView timerTextView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        timerTextView = findViewById(R.id.timerMapTextView);
+
         initViews();
         addNewUserGameToUser();
         currentObject = mapDataRepository.getObjectOnMapDetails().get(0);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        startTimer();
     }
 
     private void initViews() {
@@ -99,7 +109,26 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         btnCamera.setOnClickListener(this);
 
     }
+    private void updateTimerText(){
+        int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
+        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        timerTextView.setText(timeLeftFormatted);
+    }
 
+    private void startTimer() {
+        countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                updateTimerText();
+            }
+            @Override
+            public void onFinish() {
+                endGame();
+            }
+        }.start();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -149,13 +178,23 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 runCamera();
                 break;
             case R.id.btnEndGame:
-                startActivity(new Intent(this, EndGameActivity.class));
+                endGame();
                 break;
         }
     }
 
+    private void endGame(){
+        Intent intent = new Intent(this, EndGameActivity.class);
+        countDownTimer.cancel();
+        intent.putExtra("timeLeft", mTimeLeftInMillis);
+        startActivity(intent);
+    }
+
     private void runCamera() {
-        startActivityForResult(new Intent(this, CameraActivity.class).putExtra("currectObjectType", currentObject.getObjectType()), 1);
+        Intent intent = new Intent(this, CameraActivity.class);
+        intent.putExtra("currectObjectType", currentObject.getObjectType());
+        intent.putExtra("timeLeft", mTimeLeftInMillis);
+        startActivityForResult(intent,1);
     }
 
     @Override

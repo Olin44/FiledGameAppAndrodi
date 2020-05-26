@@ -1,5 +1,7 @@
 package com.example.filedgameapptest.apiconnections.models;
 
+import com.example.filedgameapptest.users.stats.UsersStatsDTO;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -12,4 +14,7 @@ public interface GameService {
 
     @POST("/game/saveResults")
     Call<GameUserDTO> saveResults(@Body GameUserDTO gameUserDTO);
+
+    @GET("/game/getUserResult/{userId}")
+    Call<UsersStatsDTO> getUserResult(@Path("userId") String userId);
 }
