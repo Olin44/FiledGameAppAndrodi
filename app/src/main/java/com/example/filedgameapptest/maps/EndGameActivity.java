@@ -21,6 +21,9 @@ import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,7 +37,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView txtEndMessage;
     private TextView txtResult;
-
+    private Long mTimeLeftInMillis;
     private UserDataRepository userDataRepository = UserDataRepository.getInstance();
     private GameDataRepository gameDataRepository = GameDataRepository.getInstance();
 
@@ -43,17 +46,29 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTimeLeftInMillis = calculatePoints();
+        gameDataRepository.setPoints(mTimeLeftInMillis);
         setContentView(R.layout.activity_end_game);
         initViews();
         setTextViews();
 
         endGame();
     }
-
+    private Long calculatePoints(){
+        //zaokrąglenie, bo timer po zakończeniu wyrzucał czasami, ze zostało 800milisekund
+        Intent intent = getIntent();
+        Long timeLeftInMillis = intent.getLongExtra("timeLeft", 0);
+        if(timeLeftInMillis < 1000){
+            timeLeftInMillis = 0L;
+        }
+        return timeLeftInMillis;
+    }
     private void setTextViews() {
-        //TODO: Establish end messages based on the result?
-        txtResult.setText("Congrats! You finished the game!");
-        txtEndMessage.setText(String.format("Points: %s", gameDataRepository.getPoints().toString()));
+        SimpleDateFormat gameLength = new SimpleDateFormat("mm:ss", java.util.Locale.getDefault());
+        String finishStringWithGameLength = "Congrats! You finished the game! Game length " +
+                gameLength.format(new Date(mTimeLeftInMillis));
+        txtResult.setText(finishStringWithGameLength);
+        txtEndMessage.setText(String.format("Points: %s", mTimeLeftInMillis));
     }
 
     private void initViews() {
