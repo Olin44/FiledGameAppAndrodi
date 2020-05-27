@@ -57,11 +57,25 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class MapActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
+    /**
+     * Repozytorium przechowujące dane na temat użytkownika, który aktualnie uczestniczy w grze.
+     */
     private UserDataRepository userDataRepository = UserDataRepository.getInstance();
+    /**
+     * Pole przechowujące obiekt z danymi o rozgrywce, który zostanie wysłany na serwer.
+     */
     private GameUserDTO gameUserDTO;
+    /**
+     * Repozytorium przechowujące dane o mapie, na której aktualnie jest prowadzona gra.
+     */
     private MapDataRepository mapDataRepository = MapDataRepository.getInstance();
+    /**
+     * Repozytorium przechowujące dane na temat aktualnie prowadzonej rozgrywki.
+     */
     private GameDataRepository gameDataRepository = GameDataRepository.getInstance();
-
+    /**
+     * Przycisk odpowiedzialny za przejście do widoku, na którym można zrobić zdjęcie obiektu.
+     */
     private FloatingActionButton btnCamera;
     private FloatingActionButton btnEndGame;
 
@@ -69,22 +83,43 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
     private static final String TAG = "MapActivity";
-
+    /**
+     * Pole z klasą zawierającą dane o Google Mapie.
+     */
     private GoogleMap mMap;
+    /**
+     * Pole przechowujące aktualną lokalizację użytkownika.
+     */
     private LatLng userLocation;
+    /**
+     * Pole przechowujące lokalizację obiektu.
+     */
     private LatLng objectLocation;
     private LocationRequest mLocationRequest;
     private MarkerOptions objectMarker;
+    /**
+     * Pole przechowujące informacje o aktualnie szukanym obiekcie.
+     */
     private ObjectOnMapDetails currentObject;
 
     private ImageRecognition imageRecognition = new ImageRecognition();
-
+    /**
+     * Pole z klasą odpowiedzialną za odliczanie czasu, który pozostał do zakończenia rozgrywki.
+     */
     private CountDownTimer countDownTimer;
     //Tu ustawiasz czas ile timer się liczy
+    /**
+     * Pole typu Long zawierające czas, który pozostał do końca rozgrywki.
+     */
     private Long mTimeLeftInMillis = 600000L;
+    /**
+     * Pole przechowujące pole tekstowe z czasem, który pozostał do zakończenia rozgrywki.
+     */
     private TextView timerTextView;
 
-
+    /**
+     * Metoda wywoływana przy tworzeniu widoku.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +134,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         mapFragment.getMapAsync(this);
         startTimer();
     }
-
+    /**
+     * Metoda odpowiedzialna za zainicjowanie przycisków i innych kontrolek na widoku.
+     */
     private void initViews() {
 
         btnCamera = findViewById(R.id.btnCamera);
@@ -109,13 +146,18 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         btnCamera.setOnClickListener(this);
 
     }
+    /**
+     * Metoda odpowiedzialna za aktualizację pola tekstowego z czasem pozostałym do zakończenia rozgrywki.
+     */
     private void updateTimerText(){
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
         timerTextView.setText(timeLeftFormatted);
     }
-
+    /**
+     * Metoda odpowiedzialna za rozpoczęcia odliczania czasu pozostałego do zakończenia rozgrywki.
+     */
     private void startTimer() {
         countDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -129,6 +171,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
             }
         }.start();
     }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,7 +190,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-
+    /**
+     * Metoda odpowiedzialna za wysłania na serwer informacji o rozpoczęciu przez użytkownika nowej rozgrywki.
+     */
     private void addNewUserGameToUser() {
         Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         GameService gameService = retrofit.create(GameService.class);
@@ -166,11 +212,15 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         });
 
     }
-
+    /**
+     * Metoda odpowiedzialna za zapisanie w repozytorium wszystkich ifnromacji o aktualnie prowadzonej rozgrywce..
+     */
     private void setNewGame() {
         gameDataRepository.setAllData(gameUserDTO.getId(), gameUserDTO.getMapId(),gameUserDTO.getUserId(),gameUserDTO.getPoints(), gameUserDTO.isActive());
     }
-
+    /**
+     * Metoda definiująca aktywności jakie zostaną wykonane po naciśnięciu poszczególnych przycisków.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -182,21 +232,27 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                 break;
         }
     }
-
+    /**
+     * Metoda odpowiedzialna za przejście do widoku Koniec Gry.
+     */
     private void endGame(){
         Intent intent = new Intent(this, EndGameActivity.class);
         countDownTimer.cancel();
         intent.putExtra("timeLeft", mTimeLeftInMillis);
         startActivity(intent);
     }
-
+    /**
+     * Metoda odpowiedzialna za przejście do widoku odpowiedzialnego za wykonanie zdjęcia.
+     */
     private void runCamera() {
         Intent intent = new Intent(this, CameraActivity.class);
         intent.putExtra("currectObjectType", currentObject.getObjectType());
         intent.putExtra("timeLeft", mTimeLeftInMillis);
         startActivityForResult(intent,1);
     }
-
+    /**
+     * Metoda odpowiedzialna inicjowanie wykrywania użytkownika na mapie.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if(checkPermissions()) {
@@ -207,7 +263,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         setObjectOnMap();
     }
 
-
+    /**
+     * Metoda odpowiedzialna za ustawienie znacznika na mapie.
+     */
     private void setObjectOnMap() {
         Log.d(TAG, "setObjectOnMap: called.");
         //Get object location
@@ -218,6 +276,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     // Trigger new location updates at interval
+    /**
+     * Metoda odpowiedzialna za uaktualnianie informacji o aktualnej lokalizacji gracza.
+     */
     protected void startLocationUpdates() {
 
         // Create the location request to start receiving updates
@@ -268,7 +329,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
                     }
                 });
     }
-
+    /**
+     * Metoda odpowiedzialna za zmianę położenia na mapie.
+     */
     public void onLocationChanged(Location location) {
         // New location has now been determined
 //        String msg = "Updated Location: " +
@@ -280,7 +343,9 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
     }
 
-
+    /**
+     * Metoda odpowiedzialna za sprawdzenie, czy użytkownik zezwolił aplikacji na lokalizację swojego urządzenia.
+     */
     private boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -290,13 +355,17 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
             return false;
         }
     }
-
+    /**
+     * Metoda odpowiedzialna za wyświetlania komunikatu, w którym użytkownik może zezwolić aplikacji na lokalizację swojego urządzenia.
+     */
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
     }
-
+    /**
+     * Metoda wywołana po zakończeniu działania widoku.
+     */
     @Override
     protected void onDestroy() {
         //TODO Jacek closing the game

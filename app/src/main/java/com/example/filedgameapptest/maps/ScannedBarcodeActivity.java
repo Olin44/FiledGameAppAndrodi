@@ -28,18 +28,43 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import static com.example.filedgameapptest.util.Constants.PERMISSIONS_REQUEST_CAMERA_PERMISSION;
-
+/**
+ * Klasa odpowiedzialna za wykrywanie kodów QR na obrazie z kamery.
+ */
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
+    /**
+     * Pole przechowujące widok.
+     */
     SurfaceView surfaceView;
+    /**
+     * Pole przechowujące pole tekstowe z widoku.
+     */
     TextView txtBarcodeValue;
+    /**
+     * Pole przechowujące detektor kodów QR.
+     */
     private BarcodeDetector barcodeDetector;
+    /**
+     * Pole przechowujące klasę odpowiedzialną za obsługę widoku kamery.
+     */
     private CameraSource cameraSource;
+    /**
+     * Pole przechowujące przycisk.
+     */
     Button btnAction;
+    /**
+     * Pole przechowujące string z danymi dla kolejnego widoku.
+     */
     String intentData = "";
+    /**
+     * Pole boolean odpowiedzialne za przechowywanie informacji czy na obrazie znajduje się kod.
+     */
     boolean isURL = false;
 
-
+    /**
+     * Metoda wywoływana przy tworzeniu widoku.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +72,9 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
         initViews();
     }
-
+    /**
+     * Metoda odpowiedzialna za zainicjowanie przycisków i innych kontrolek na widoku.
+     */
     private void initViews() {
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
@@ -70,7 +97,9 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Metoda odpowiedzialna za zainicjowanie detektora i zasobów.
+     */
     private void initialiseDetectorsAndSources() {
 
         Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
@@ -151,13 +180,17 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Metoda odpowiedzialna za wykonanie polecenia, gdy zostanie wykonana pauza.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         cameraSource.release();
     }
-
+    /**
+     * Metoda odpowiedzialna za wykonanie polecenia, gdy zostanie wykonana powrót.
+     */
     @Override
     protected void onResume() {
         super.onResume();

@@ -28,21 +28,42 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
+/**
+ * Klasa odpowiadająca za obsługę funkcjonalności w widoku kończenia gry.
+ */
 public class EndGameActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Button btnStartNewMap;
+    /**
+     * Przycisk służący do przejścia do widoku konta użytkownika.
+     */
     private Button btnAccount;
+    /**
+     * Przycisk odpowiedzialny za wylogowywanie.
+     */
     private Button btnLogOut;
-
+    /**
+     * Pole tekstowe do wyświetlania wiadomości o wynikach po zakończeniu gry.
+     */
     private TextView txtEndMessage;
     private TextView txtResult;
+    /**
+     * Pole odpowiedzialne za przechowywanie czasu, który pozostał do zakończenia gry.
+     */
     private Long mTimeLeftInMillis;
+    /**
+     * Repozytorium przechowujące dane na temat użytkownika, który aktualnie uczestniczy w grze.
+     */
     private UserDataRepository userDataRepository = UserDataRepository.getInstance();
+    /**
+     * Repozytorium przechowujące dane na temat aktualnie prowadzonej rozgrywki.
+     */
     private GameDataRepository gameDataRepository = GameDataRepository.getInstance();
 
 
-
+    /**
+     * Metoda wywoływana przy tworzeniu widoku.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +75,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
 
         endGame();
     }
+    /**
+     * Metoda obliczająca ilość punktów, które użytkownik otrzyma za zakończoną rozgrywkę.
+     */
     private Long calculatePoints(){
         //zaokrąglenie, bo timer po zakończeniu wyrzucał czasami, ze zostało 800milisekund
         Intent intent = getIntent();
@@ -63,6 +87,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         }
         return timeLeftInMillis;
     }
+    /**
+     * Metoda odpowiedzialna za wyświetlenie baneru odpowiedzialnego za poinformowanie użytkownika o zakończeniu gry i ilości punktów, które otrzymał.
+     */
     private void setTextViews() {
         SimpleDateFormat gameLength = new SimpleDateFormat("mm:ss", java.util.Locale.getDefault());
         String finishStringWithGameLength = "Congrats! You finished the game! Game length " +
@@ -70,7 +97,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         txtResult.setText(finishStringWithGameLength);
         txtEndMessage.setText(String.format("Points: %s", mTimeLeftInMillis));
     }
-
+    /**
+     * Metoda odpowiedzialna za zainicjowanie przycisków i innych kontrolek na widoku.
+     */
     private void initViews() {
         btnStartNewMap = findViewById(R.id.btnStartNewMap);
         btnAccount = findViewById(R.id.btnAccount);
@@ -83,7 +112,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         btnAccount.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
     }
-
+    /**
+     * Metoda definiująca aktywności jakie zostaną wykonane po naciśnięciu poszczególnych przycisków.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -99,7 +130,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
-
+    /**
+     * Metoda odpowiedzialna za wylogowanie użytkownika.
+     */
     private void LogOut() {
         LogoutUserDTO logoutUserDTO  = new LogoutUserDTO(userDataRepository.getEmail());
         Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
@@ -123,7 +156,9 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         });
 
     }
-
+    /**
+     * Metoda odpowiedzialna za wysłanie danych o zakończonej rozgrywce na serwer.
+     */
     private void endGame(){
         GameUserDTO gameUserDTO = new GameUserDTO();
         gameUserDTO.setActive(gameDataRepository.getActive());
