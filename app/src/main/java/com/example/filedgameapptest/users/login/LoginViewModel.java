@@ -7,19 +7,33 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.users.register.RegisterFormState;
 
-
+/**
+ *Klasa służąca do walidacji danych wprowadzanych w formularzu logowania.
+ */
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    /**
+     * Pole przechowujące email użytkownika.
+     */
     private String email;
+    /**
+     * Pole przechowujące hasło użytkownika.
+     */
     private String password;
 
+    /**
+     *Metoda pobieająca dane wprowadzone przez użytkownika.
+     */
     LiveData<LoginFormState> getLoginFormState(){
         return loginFormState;
     }
-
+    /**
+     *Metoda przeprwadzająca walidację danych, gdy dane zostaną zmienione w widoku
+     * @param email email użytkownika
+     * @param password hasło użytkownika
+     */
     public void loginDataChanged(String email, String password){
         if(!isEmailValid(email)){
             loginFormState.setValue(new LoginFormState(R.string.invalid_email, null));
@@ -29,7 +43,10 @@ public class LoginViewModel extends ViewModel {
             loginFormState.setValue(new LoginFormState(true));
         }
     }
-
+    /**
+     *Metoda przeprwadzająca walidację emaila.
+     * @return true, gdy dane są poprawne, false dla niepoprawnych danych
+     */
     private boolean isEmailValid(String email) {
 
         if(email == null || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -39,7 +56,10 @@ public class LoginViewModel extends ViewModel {
             return !email.trim().isEmpty();
         }
     }
-
+    /**
+     *Metoda przeprwadzająca walidację hasła.
+     * @return true, gdy dane są poprawne, false dla niepoprawnych danych
+     */
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }

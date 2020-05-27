@@ -1,0 +1,12 @@
+com.example.filedgameapptest
+com.example.filedgameapptest.apiconnections
+com.example.filedgameapptest.apiconnections.models
+com.example.filedgameapptest.imagerecognition
+com.example.filedgameapptest.maps
+com.example.filedgameapptest.maps.data
+com.example.filedgameapptest.users.account
+com.example.filedgameapptest.users.data
+com.example.filedgameapptest.users.login
+com.example.filedgameapptest.users.register
+com.example.filedgameapptest.users.stats
+com.example.filedgameapptest.util
