@@ -54,7 +54,9 @@ import retrofit2.Retrofit;
 
 import static com.example.filedgameapptest.util.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-
+/**
+ * Klasa odpowiedzialna za obsługę aktywności na mapie.
+ */
 public class MapActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
 
     /**
@@ -117,6 +119,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      */
     private TextView timerTextView;
 
+    int actualProcessObject = 0;
+
     /**
      * Metoda wywoływana przy tworzeniu widoku.
      */
@@ -128,7 +132,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
         initViews();
         addNewUserGameToUser();
-        currentObject = mapDataRepository.getObjectOnMapDetails().get(0);
+        currentObject = mapDataRepository.getObjectOnMapDetails().get(actualProcessObject);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -181,7 +185,13 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
             if(resultCode == RESULT_OK){
                 boolean isObjectFoud = data.getBooleanExtra("isCorrectObject",false);
                 if(isObjectFoud){
-                    //TODO:Monika Go to next object
+                    //TODO: do przetestowania -> pechodzenie po obiektach naiwna implementacja
+                    actualProcessObject = actualProcessObject + 1;
+                    if(actualProcessObject < mapDataRepository.getObjectOnMapDetails().size()-1)
+                        currentObject = mapDataRepository.getObjectOnMapDetails().get(actualProcessObject);
+                    else{
+                        endGame();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Try again!", Toast.LENGTH_SHORT).show();
@@ -246,7 +256,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      */
     private void runCamera() {
         Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra("currectObjectType", currentObject.getObjectType());
+        intent.putExtra("currectObjectType", currentObject.getObjectType().type);
         intent.putExtra("timeLeft", mTimeLeftInMillis);
         startActivityForResult(intent,1);
     }
