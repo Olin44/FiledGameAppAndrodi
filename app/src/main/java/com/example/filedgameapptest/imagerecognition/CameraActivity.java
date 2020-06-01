@@ -17,15 +17,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.filedgameapptest.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.CameraSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.label.FirebaseVisionCloudImageLabelerOptions;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.google.firebase.ml.vision.label.FirebaseVisionOnDeviceImageLabelerOptions;
@@ -81,7 +76,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initViews() {
 
-        btnGoBackToMap = findViewById(R.id.btnGoBackToMap);
+        btnGoBackToMap = (FloatingActionButton) findViewById(R.id.btnGoBackToMap);
         btnGoBackToMap.setOnClickListener(this);
         timerTextView = findViewById(R.id.timerCameraTextView);
 
