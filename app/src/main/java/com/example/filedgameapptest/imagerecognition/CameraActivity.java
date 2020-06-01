@@ -65,6 +65,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
         initViews();
         Intent intent = getIntent();
         objectType = intent.getStringExtra("objectType");
@@ -76,11 +77,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initViews() {
 
-        btnGoBackToMap = (FloatingActionButton) findViewById(R.id.btnGoBackToMap);
+        btnGoBackToMap = findViewById(R.id.btnGoBackToMap);
         btnGoBackToMap.setOnClickListener(this);
         timerTextView = findViewById(R.id.timerCameraTextView);
-
-        setContentView(R.layout.activity_camera);
 
         cameraView = findViewById(R.id.camera_view);
         btnDetect = findViewById(R.id.btn_detect);
