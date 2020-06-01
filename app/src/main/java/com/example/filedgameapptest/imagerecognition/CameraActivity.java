@@ -1,74 +1,75 @@
 package com.example.filedgameapptest.imagerecognition;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.maps.EndGameActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.Frame;
-import com.google.android.gms.vision.label.ImageLabeler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.cloud.FirebaseVisionCloudDetectorOptions;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.label.FirebaseVisionCloudImageLabelerOptions;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
 import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
-import com.google.firebase.ml.vision.objects.FirebaseVisionObject;
-import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetector;
-import com.google.firebase.ml.vision.objects.FirebaseVisionObjectDetectorOptions;
+import com.google.firebase.ml.vision.label.FirebaseVisionOnDeviceImageLabelerOptions;
+import com.wonderkiln.camerakit.CameraKitError;
+import com.wonderkiln.camerakit.CameraKitEvent;
+import com.wonderkiln.camerakit.CameraKitEventListener;
+import com.wonderkiln.camerakit.CameraKitImage;
+import com.wonderkiln.camerakit.CameraKitVideo;
+import com.wonderkiln.camerakit.CameraView;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-import static com.example.filedgameapptest.util.Constants.PERMISSIONS_REQUEST_CAMERA_PERMISSION;
+import dmax.dialog.SpotsDialog;
 
-public class CameraActivity extends AppCompatActivity implements View.OnClickListener {
-
+public class CameraActivity extends AppCompatActivity implements View.OnClickListener{
+    CameraView cameraView;
+    Button btnDetect;
+    AlertDialog alertDialog;
     private FloatingActionButton btnGoBackToMap;
-    private SurfaceView surfaceViewCamera;
     private static final String TAG = "CameraActivity";
     private Long mTimeLeftInMillis;
 
-    private CameraSource cameraSource;
     private String  objectType;
     private boolean isCorrectObject;
     private TextView timerTextView;
     private CountDownTimer countDownTimer;
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        cameraView.start();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onPause() {
+        super.onPause();
+        cameraView.stop();
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
         initViews();
         Intent intent = getIntent();
         objectType = intent.getStringExtra("objectType");
@@ -83,8 +84,68 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         btnGoBackToMap = findViewById(R.id.btnGoBackToMap);
         btnGoBackToMap.setOnClickListener(this);
         timerTextView = findViewById(R.id.timerCameraTextView);
-        surfaceViewCamera = findViewById(R.id.surfaceViewCamera);
-        setSurfaceViewCamera();
+
+        setContentView(R.layout.activity_camera);
+
+        cameraView = findViewById(R.id.camera_view);
+        btnDetect = findViewById(R.id.btn_detect);
+
+        alertDialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setMessage("Please wait...")
+                .setCancelable(false)
+                .build();
+
+        cameraView.addCameraKitListener(new CameraKitEventListener() {
+            @Override
+            public void onEvent(CameraKitEvent cameraKitEvent) {
+
+            }
+
+            @Override
+            public void onError(CameraKitError cameraKitError) {
+
+            }
+
+            @Override
+            public void onImage(CameraKitImage cameraKitImage) {
+                alertDialog.show();
+                Bitmap bitmap = cameraKitImage.getBitmap();
+                bitmap = Bitmap
+                        .createScaledBitmap(bitmap, cameraView.getWidth(), cameraView.getHeight(), false);
+                cameraView.stop();
+                runDetector(bitmap);
+            }
+
+            @Override
+            public void onVideo(CameraKitVideo cameraKitVideo) {
+
+            }
+        });
+
+        btnDetect.setOnClickListener(v -> {
+            cameraView.start();
+            cameraView.captureImage();
+        });
+    }
+
+    private void runDetector(Bitmap bitmap) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+
+        FirebaseVisionOnDeviceImageLabelerOptions options = new FirebaseVisionOnDeviceImageLabelerOptions.Builder().build();
+        FirebaseVisionImageLabeler detector =  FirebaseVision.getInstance().getOnDeviceImageLabeler(options);
+        Task<List<FirebaseVisionImageLabel>> processImage = detector.processImage(image);
+        processImage.addOnSuccessListener(this::processDataResults);
+        processImage.addOnFailureListener(e -> Log.d("Recognition error", Objects.requireNonNull(e.getMessage())));
+    }
+
+    private void processDataResults(List<FirebaseVisionImageLabel> labelList){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(FirebaseVisionImageLabel label : labelList){
+            stringBuilder.append(label.getText());
+        }
+        Toast.makeText(this, "Result" + stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+        alertDialog.dismiss();
 
     }
 
@@ -94,90 +155,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btnGoBackToMap:
                 goBackToMap();
                 break;
-        }
-    }
-
-    private void setSurfaceViewCamera(){
-        Log.d(TAG, "setSurfaceViewCamera: called.");
-
-        //TODO Jacek: image detection
-        Detector detector = new Detector() {
-            @Override
-            public SparseArray detect(Frame frame) {
-                SparseArray sparseArray = new SparseArray();
-                FirebaseVisionObjectDetectorOptions options =
-                        new FirebaseVisionObjectDetectorOptions
-                                .Builder()
-                                .setDetectorMode(FirebaseVisionObjectDetectorOptions.SINGLE_IMAGE_MODE)
-                                .enableClassification()
-                                .build();
-                YuvImage yuvImage = new YuvImage(frame.getGrayscaleImageData().array(), ImageFormat.NV21, frame.getMetadata().getWidth(), frame.getMetadata().getHeight(), null);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                yuvImage.compressToJpeg(new Rect(0, 0, frame.getMetadata().getWidth(), frame.getMetadata().getHeight()), 100, byteArrayOutputStream);
-                byte[] jpegArray = byteArrayOutputStream.toByteArray();
-                Bitmap tempBitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.length);
-                FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(tempBitmap);
-
-                FirebaseVisionImageLabeler objectDetector = FirebaseVision.getInstance().getOnDeviceImageLabeler();
- //                       FirebaseVision.getInstance().getOnDeviceObjectDetector();
-                objectDetector.processImage(image)
-                        .addOnSuccessListener(labels -> {
-                            int i = 0;
-                            for (FirebaseVisionImageLabel l : labels) {
-                                sparseArray.append(i, l);
-                                i++;
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        System.out.println("Failure");
-                                        //failure aka ja
-                                    }
-                                });
-                return sparseArray;
-            }
-        };
-
-        cameraSource = new CameraSource.Builder(this, detector)
-                .setRequestedPreviewSize(1920, 1080)
-                .setAutoFocusEnabled(true)
-                .build();
-
-        surfaceViewCamera.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        cameraSource.start(surfaceViewCamera.getHolder());
-                    } else {
-                        ActivityCompat.requestPermissions(CameraActivity.this, new
-                                String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA_PERMISSION);
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-    }
-
-    private void checkType(){
-        if(isCorrectObject){
-            Toast.makeText(getApplicationContext(), "You found correct object!", Toast.LENGTH_SHORT).show();
-            goBackToMap();
         }
     }
 
@@ -211,5 +188,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     private void endGame(){
         finish();
+    }
+
+    private void checkType(){
+        if(isCorrectObject){
+            Toast.makeText(getApplicationContext(), "You found correct object!", Toast.LENGTH_SHORT).show();
+            goBackToMap();
+        }
     }
 }
