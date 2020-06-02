@@ -33,8 +33,9 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_map);
-        //Intent incomingIntent = getIntent();
-        url = BaseURL.baseURL + "maps/getMapById/2";
+        Bundle incomingIntent = getIntent().getExtras();
+        //url = BaseURL.baseURL + "maps/getMapById/2";
+        url = incomingIntent.getString("url");
 
         initViews();
         requestMap();
@@ -50,7 +51,9 @@ public class StartMapActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<Map> call, Response<Map> response) {
                 map = response.body();
-                txtResponse.setText(map.getName());
+                String message = "The map name : " + map.getName() + System.getProperty("line.separator")
+                        +"To start the game please click on the button below." + System.getProperty("line.separator") + "Good luck!";
+                txtResponse.setText(message);
                 setMapDataRepository();
                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 btnStartNewMapActivity.setEnabled(true);

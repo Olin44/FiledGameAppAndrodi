@@ -145,11 +145,11 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity( new Intent(LoginActivity.this, UserAccountActivity.class));
             }
         });
-        //TODO: to change after tests, it should go to ScannedBarcodeActivity
-        alert.setNegativeButton("Go to scan start map", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Go to scan QR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                startActivity( new Intent(LoginActivity.this, StartMapActivity.class));
+                //startActivity( new Intent(LoginActivity.this, StartMapActivity.class));
+                startActivity(new Intent(LoginActivity.this, ScannedBarcodeActivity.class));
             }
         });
         alert.show();

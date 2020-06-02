@@ -20,10 +20,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
-import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
-import com.example.filedgameapptest.maps.MapFragment;
-import com.example.filedgameapptest.maps.ScannedBarcodeActivity;
-import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
 import com.example.filedgameapptest.users.register.RegisterActivity;
 import com.google.android.gms.common.ConnectionResult;
@@ -39,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private Button btnLogIn;
     private Button btnSignUp;
-    private Button btnMapFragment;
 
     private boolean mLocationPermissionGranted = false;
 
@@ -54,15 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initViews() {
         btnLogIn = findViewById(R.id.btnLogIn);
         btnSignUp = findViewById(R.id.btnSignUpActivity);
-        btnMapFragment = findViewById(R.id.btnMapFragment);
 
-        btnMapFragment.setEnabled(false);
         btnSignUp.setEnabled(false);
         btnLogIn.setEnabled(false);
 
         btnLogIn.setOnClickListener(this);
         btnSignUp.setOnClickListener(this);
-        btnMapFragment.setOnClickListener(this);
 
     }
 
@@ -75,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnSignUpActivity:
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-                break;
-            case R.id.btnMapFragment:
-                startActivity(new Intent(MainActivity.this, MapFragment.class));
                 break;
         }
 
@@ -189,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void enableButtons(){
-        btnMapFragment.setEnabled(true);
         btnSignUp.setEnabled(true);
         btnLogIn.setEnabled(true);
     }

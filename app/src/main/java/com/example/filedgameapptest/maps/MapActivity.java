@@ -24,7 +24,6 @@ import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
 import com.example.filedgameapptest.apiconnections.models.GameService;
 import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.imagerecognition.CameraActivity;
-import com.example.filedgameapptest.imagerecognition.ImageRecognition;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
 import com.example.filedgameapptest.users.data.UserDataRepository;
@@ -104,7 +103,6 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      */
     private ObjectOnMapDetails currentObject;
 
-    private ImageRecognition imageRecognition = new ImageRecognition();
     /**
      * Pole z klasą odpowiedzialną za odliczanie czasu, który pozostał do zakończenia rozgrywki.
      */

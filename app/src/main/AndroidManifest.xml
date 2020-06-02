@@ -47,9 +47,6 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="label" />
 
-        <activity
-            android:name=".maps.MapFragment"
-            android:label="@string/title_activity_maps" />
         <activity android:name=".users.account.UserAccountActivity" />
         <activity
             android:name=".users.register.RegisterActivity"
