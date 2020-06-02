@@ -190,6 +190,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if(isCorrectObject){
             checkType();
             goBackToMap();
+        }else{
+            Toast.makeText(this, "Wrong object. Try again!", Toast.LENGTH_SHORT).show();
         }
         alertDialog.dismiss();
     }
@@ -267,9 +269,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             isCorrect = objectOnImageNamesList.stream().anyMatch(buildingLikeObjects::contains);
         }
         if(correctObject.equals("GARDEN")){
-            List<String> buildingLikeObjects = new ArrayList<>(Arrays
+            List<String> buildingLikeGarden = new ArrayList<>(Arrays
                     .asList("GARDEN", "PLANT", "TREE"));
-            isCorrect = objectOnImageNamesList.stream().anyMatch(buildingLikeObjects::contains);
+            isCorrect = objectOnImageNamesList.stream().anyMatch(buildingLikeGarden::contains);
         }
         return isCorrect;
     }
