@@ -102,7 +102,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_camera);
         initViews();
         Intent intent = getIntent();
-        correctObject = intent.getStringExtra("objectType");
+        correctObject = intent.getStringExtra("correctObjectType");
         isCorrectObject = false;
         mTimeLeftInMillis = intent.getLongExtra("timeLeft", 0);
         startTimer();
@@ -176,18 +176,21 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private void processDataResults(List<FirebaseVisionImageLabel> labelList){
         List<String> objectFoundOnImageNames = new ArrayList<>();
         for(FirebaseVisionImageLabel label : labelList){
-            objectFoundOnImageNames.add(label.getText());
+            objectFoundOnImageNames.add(label.getText().toUpperCase());
         }
 
         StringBuilder stringBuilder = new StringBuilder();
         for (String name: objectFoundOnImageNames) {
             stringBuilder
-                    .append(name.toUpperCase())
+                    .append(name)
                     .append(" ");
         }
         Toast.makeText(this, "Result" + stringBuilder.toString(), Toast.LENGTH_SHORT).show();
         isCorrectObject = isCorrectObject(objectFoundOnImageNames);
-        checkType();
+        if(isCorrectObject){
+            checkType();
+            goBackToMap();
+        }
         alertDialog.dismiss();
     }
     /**

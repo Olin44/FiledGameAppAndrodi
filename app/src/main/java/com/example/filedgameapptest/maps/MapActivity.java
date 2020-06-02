@@ -185,10 +185,11 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
             if(resultCode == RESULT_OK){
                 boolean isObjectFoud = data.getBooleanExtra("isCorrectObject",false);
                 if(isObjectFoud){
-                    //TODO: do przetestowania -> pechodzenie po obiektach naiwna implementacja
                     actualProcessObject = actualProcessObject + 1;
-                    if(actualProcessObject < mapDataRepository.getObjectOnMapDetails().size()-1)
+                    if(actualProcessObject < mapDataRepository.getObjectOnMapDetails().size()) {
                         currentObject = mapDataRepository.getObjectOnMapDetails().get(actualProcessObject);
+                        setObjectOnMap();
+                    }
                     else{
                         endGame();
                     }
@@ -256,7 +257,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      */
     private void runCamera() {
         Intent intent = new Intent(this, CameraActivity.class);
-        intent.putExtra("currectObjectType", currentObject.getObjectType().type);
+        intent.putExtra("correctObjectType", currentObject.getObjectType().type.toString());
         intent.putExtra("timeLeft", mTimeLeftInMillis);
         startActivityForResult(intent,1);
     }
