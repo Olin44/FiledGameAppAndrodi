@@ -2,6 +2,8 @@ package com.example.filedgameapptest.apiconnections.models;
 
 import com.example.filedgameapptest.users.stats.UsersStatsDTO;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -33,5 +35,5 @@ public interface GameService {
      * @return zwraca obiekt Call<GameUserDTO>, w którym znajdują się dane o grze użytkownika
      */
     @GET("/game/getUserResult/{userId}")
-    Call<UsersStatsDTO> getUserResult(@Path("userId") String userId);
+    Call<List<UsersStatsDTO>> getUserResult(@Path("userId") String userId);
 }

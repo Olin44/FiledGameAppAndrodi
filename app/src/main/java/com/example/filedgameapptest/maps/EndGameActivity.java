@@ -10,25 +10,15 @@ import android.widget.TextView;
 
 import com.example.filedgameapptest.MainActivity;
 import com.example.filedgameapptest.R;
-import com.example.filedgameapptest.apiconnections.RetrofitClientInstance;
-import com.example.filedgameapptest.apiconnections.UserService;
-import com.example.filedgameapptest.apiconnections.models.GameService;
-import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.users.UserUtils;
 import com.example.filedgameapptest.users.account.UserAccountActivity;
-import com.example.filedgameapptest.users.data.LogoutUserDTO;
 import com.example.filedgameapptest.users.data.UserDataRepository;
-import com.example.filedgameapptest.users.login.LoginActivity;
-import com.example.filedgameapptest.users.register.RegisterActivity;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 /**
  * Klasa odpowiadająca za obsługę funkcjonalności w widoku kończenia gry.
  */
@@ -86,14 +76,36 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
         if(timeLeftInMillis < 1000){
             timeLeftInMillis = 0L;
         }
+        if(! intent.getBooleanExtra("isGameFinished", false)){
+            timeLeftInMillis = 0L;
+        }
         return timeLeftInMillis;
     }
     /**
      * Metoda odpowiedzialna za wyświetlenie baneru odpowiedzialnego za poinformowanie użytkownika o zakończeniu gry i ilości punktów, które otrzymał.
      */
     private void setTextViews() {
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra("isGameFinished", false)){
+            textWinGame();
+        }
+        else {
+            textFailedGame();
+        }
+    }
+
+    private void textFailedGame(){
+        String finishStringWithGameLength = "You lost the game!";
+        txtResult.setText(finishStringWithGameLength);
+        txtEndMessage.setText(String.format("Points: %s", mTimeLeftInMillis));
+    }
+
+    private void textWinGame(){
         SimpleDateFormat gameLength = new SimpleDateFormat("mm:ss", java.util.Locale.getDefault());
-        String finishStringWithGameLength = "Congrats! You finished the game! Game length " +
+        String finishStringWithGameLength =
+                        "Congrats!" + System.getProperty("line.separator")
+                        + "You finished the game!" + System.getProperty("line.separator")
+                        + "Game length " +
                 gameLength.format(new Date(mTimeLeftInMillis));
         txtResult.setText(finishStringWithGameLength);
         txtEndMessage.setText(String.format("Points: %s", mTimeLeftInMillis));

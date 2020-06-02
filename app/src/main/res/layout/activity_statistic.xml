@@ -17,7 +17,7 @@
         android:isScrollContainer="true"
         android:scrollIndicators="bottom"
         android:scrollHorizontally="true"
-        android:text="TextView"
+        android:text=""
         android:textAlignment="viewStart"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

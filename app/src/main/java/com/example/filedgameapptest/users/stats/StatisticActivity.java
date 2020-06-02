@@ -12,6 +12,10 @@ import com.example.filedgameapptest.users.data.UserDataRepository;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,21 +40,34 @@ public class StatisticActivity extends AppCompatActivity {
     private void getUserStats() {
         Retrofit retrofit = RetrofitClientInstance.getRetrofitInstance();
         GameService gameService = retrofit.create(GameService.class);
-        Call<UsersStatsDTO> call = gameService.getUserResult(userDataRepository.getId());
+        Call<List<UsersStatsDTO>> call = gameService.getUserResult(userDataRepository.getId());
         System.out.println(userDataRepository.getId());
-        call.enqueue(new Callback<UsersStatsDTO>() {
+        call.enqueue(new Callback<List<UsersStatsDTO>>() {
             @Override
-            public void onResponse(Call<UsersStatsDTO> call, Response<UsersStatsDTO> response) {
+            public void onResponse(Call<List<UsersStatsDTO>> call, Response<List<UsersStatsDTO>> response) {
                 if (response.isSuccessful()) {
-                    System.out.println(response.body().toString());
+                    int gamesCounter = 1;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", java.util.Locale.getDefault());
+                    for(UsersStatsDTO stats : response.body()){
+                        String statString = gamesCounter + ". " +
+                                stats.mapName + ", "+
+                                simpleDateFormat.format(stats.endGame) + ", "+
+                                "Points: " + stats.points + "." + System.getProperty("line.separator");
+                        txtStats.append(statString);
+                        gamesCounter++;
+                    };
 
                 } else {
-                    System.out.println(response.errorBody());
+                    try {
+                        txtStats.append(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<UsersStatsDTO> call, Throwable t) {
+            public void onFailure(Call<List<UsersStatsDTO>> call, Throwable t) {
                 //TODO:implementacja
             }
         });

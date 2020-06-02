@@ -250,6 +250,12 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     private void endGame(){
         Intent intent = new Intent(this, EndGameActivity.class);
         countDownTimer.cancel();
+        if(actualProcessObject < mapDataRepository.getObjectOnMapDetails().size()){
+            intent.putExtra("isGameFinished", false);
+        }
+        else {
+            intent.putExtra("isGameFinished", true);
+        }
         intent.putExtra("timeLeft", mTimeLeftInMillis);
         startActivity(intent);
     }
