@@ -18,6 +18,7 @@ import com.example.filedgameapptest.apiconnections.UserService;
 import com.example.filedgameapptest.users.data.LogoutUserDTO;
 import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.example.filedgameapptest.users.login.LoginActivity;
+import com.example.filedgameapptest.users.stats.StatisticActivity;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -73,8 +74,7 @@ public class UserAccountActivity extends AppCompatActivity implements Observer, 
 
         switch (v.getId()) {
             case R.id.btnShowStats:
-                //TODO Implement ShowStatsActivity
-                Toast.makeText(getApplicationContext(), "Stats", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, StatisticActivity.class));
                 break;
             case R.id.btnLogOut:
                 LogoutUserDTO logoutUserDTO  = new LogoutUserDTO(userDataRepository.getEmail());

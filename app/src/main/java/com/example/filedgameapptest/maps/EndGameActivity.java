@@ -127,7 +127,7 @@ public class EndGameActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(this, UserAccountActivity.class));
                 break;
             case R.id.btnStartNewMap:
-                startActivity(new Intent(this, StartMapActivity.class));
+                startActivity(new Intent(this, ScannedBarcodeActivity.class));
                 break;
         }
     }

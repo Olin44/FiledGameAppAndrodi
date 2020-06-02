@@ -29,7 +29,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".imagerecognition.CameraActivity"></activity>
+        <activity android:name=".users.stats.StatisticActivity"></activity>
+        <activity android:name=".imagerecognition.CameraActivity" />
         <activity android:name=".maps.MapActivity" />
         <activity android:name=".maps.EndGameActivity" />
         <!--
