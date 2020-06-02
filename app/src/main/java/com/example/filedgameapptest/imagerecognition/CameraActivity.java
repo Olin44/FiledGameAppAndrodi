@@ -30,6 +30,7 @@ import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -253,6 +254,20 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
      * Metoda sprawdzająca czy szukany obiekt znajduje się na liście obiektów znalezionych przez detektor.
      */
     private boolean isCorrectObject(List<String> objectOnImageNamesList){
-        return objectOnImageNamesList.contains(correctObject);
+        boolean isCorrect = false;
+        if(correctObject.equals("SKY")){
+            isCorrect = objectOnImageNamesList.contains(correctObject);
+        }
+        if(correctObject.equals("BUILDING")){
+            List<String> buildingLikeObjects = new ArrayList<>(Arrays
+                            .asList("HOUSE, BUILDING, ROOF, BUILDINGROOF", "SKYSCRAPER"));
+            isCorrect = objectOnImageNamesList.stream().anyMatch(buildingLikeObjects::contains);
+        }
+        if(correctObject.equals("GARDEN")){
+            List<String> buildingLikeObjects = new ArrayList<>(Arrays
+                    .asList("GARDEN", "PLANT", "TREE"));
+            isCorrect = objectOnImageNamesList.stream().anyMatch(buildingLikeObjects::contains);
+        }
+        return isCorrect;
     }
 }
