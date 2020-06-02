@@ -116,6 +116,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      * Pole przechowujące pole tekstowe z czasem, który pozostał do zakończenia rozgrywki.
      */
     private TextView timerTextView;
+    private TextView txtHint;
 
     int actualProcessObject = 0;
 
@@ -126,7 +127,6 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        timerTextView = findViewById(R.id.timerMapTextView);
 
         initViews();
         addNewUserGameToUser();
@@ -143,6 +143,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
 
         btnCamera = findViewById(R.id.btnCamera);
         btnEndGame = findViewById(R.id.btnEndGame);
+        txtHint = findViewById(R.id.txtHint);
+        timerTextView = findViewById(R.id.timerMapTextView);
 
         btnEndGame.setOnClickListener(this);
         btnCamera.setOnClickListener(this);
@@ -181,8 +183,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         Log.d(TAG, "onActivityResult: called.");
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
-                boolean isObjectFoud = data.getBooleanExtra("isCorrectObject",false);
-                if(isObjectFoud){
+                boolean isObjectFound = data.getBooleanExtra("isCorrectObject",false);
+                if(isObjectFound){
                     actualProcessObject = actualProcessObject + 1;
                     if(actualProcessObject < mapDataRepository.getObjectOnMapDetails().size()) {
                         currentObject = mapDataRepository.getObjectOnMapDetails().get(actualProcessObject);
@@ -282,6 +284,7 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
         objectMarker = new MarkerOptions().position(objectLocation).title("Object location");
         mMap.addMarker(objectMarker);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(objectLocation, 15));
+        txtHint.setText(currentObject.getHint());
     }
 
     // Trigger new location updates at interval

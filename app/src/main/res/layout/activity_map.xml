@@ -24,38 +24,74 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:src="@android:drawable/ic_menu_camera"
-        app:layout_constraintBottom_toTopOf="@+id/btnEndGame"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnEndGame"
+        app:layout_constraintEnd_toStartOf="@+id/btnEndGame" />
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".maps.MapFragment"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <LinearLayout
-        android:id="@+id/validity"
-        android:layout_width="286dp"
-        android:layout_height="69dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".maps.MapFragment" />
 
-        <TextView
-            android:id="@+id/timerMapTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Timer"
-            android:textColor="#7DE91E"
-            android:textColorHighlight="#E91E63"
-            android:textColorHint="#FFFFFF"
-            android:textSize="24sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/timerMapTextView"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtHint"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtHint"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/txtHint"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnCamera"
+        app:layout_constraintTop_toTopOf="@+id/btnCamera"
+        app:layout_constraintVertical_bias="0.50"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Time:"
+        app:layout_constraintBottom_toTopOf="@+id/timerMapTextView"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Hint:"
+        app:layout_constraintBottom_toTopOf="@+id/txtHint"
+        app:layout_constraintStart_toEndOf="@+id/timerMapTextView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

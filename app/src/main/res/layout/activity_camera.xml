@@ -8,19 +8,20 @@
 
     <TextView
         android:id="@+id/timerCameraTextView"
-        android:layout_width="384dp"
-        android:layout_height="0dp"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Timer"
-        android:textColor="#7DE91E"
-        android:textColorHighlight="#E91E63"
-        android:textColorHint="#FFFFFF"
-        android:textSize="24sp"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_detect"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtHint"
+        tools:visibility="visible" />
 
     <view
         android:id="@+id/camera_view"
