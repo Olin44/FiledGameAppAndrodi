@@ -26,6 +26,7 @@ import com.example.filedgameapptest.apiconnections.models.GameUserDTO;
 import com.example.filedgameapptest.imagerecognition.CameraActivity;
 import com.example.filedgameapptest.maps.data.GameDataRepository;
 import com.example.filedgameapptest.maps.data.MapDataRepository;
+import com.example.filedgameapptest.users.UserUtils;
 import com.example.filedgameapptest.users.data.UserDataRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -377,7 +378,8 @@ public class MapActivity extends AppCompatActivity implements View.OnClickListen
      */
     @Override
     protected void onDestroy() {
-        //TODO Jacek closing the game
+        UserUtils.endGame(gameDataRepository);
+        UserUtils.logoutUser(userDataRepository);
         super.onDestroy();
     }
 }
